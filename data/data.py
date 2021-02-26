@@ -53,14 +53,14 @@ def requestAndDump(url, filename):
     request = requests.get(url)
     data = request.content
 
-    if request.status_code is 200:
+    if request.status_code == 200:
         with open(filename, "w") as file:
             file.write(data.__str__()[2:-1])                
     else:
-        print("Non 200 status code")
-        print("Status Code:", request.status_code)
-        print(request.headers)
-        print(request.content)
+        _printlog("Non 200 status code")
+        _printlog("Status Code:", request.status_code)
+        _printlog(request.headers)
+        _printlog(request.content)
         success = False
 
     return success
@@ -70,57 +70,37 @@ def request(url):
 
     request = requests.get(url)
 
-    if request.status_code is not 200:
-        print("Non 200 status code")
-        print("Status Code:", request.status_code)
-        print(request.headers)
-        print(request.content)
+    if request.status_code !=  200:
+        _printlog("Non 200 status code")
+        _printlog(request.status_code)
+        _printlog(request.headers)
+        _printlog(request.content)
         success = False
 
     return [success, request]
-
-def _scrape(start, length, dumpfolder):
-    pairs = getDayPairs(start, length)
-    
-    for i in range(len(pairs)):
-        if timeframe == "1m":
-            # max number of records returned by the api is 1000 so we will have to request twice for each day
-            
-            print(pairs[i][2])
-            url = endpoint.format(start=pairs[i][0], end=pairs[i][1]-int(day/2), timeframe=timeframe, symbol=symbol)
-            
-            print(url)
-
-
-            if requestAndDump(url, os.path.join(dumpfolder, pairs[i][2] + ".1.json")) == True:
-                url = endpoint.format(start=pairs[i][1]-int(day/2), end=pairs[i][1], timeframe=timeframe, symbol=symbol)
-                print(url,"\n")
-
-                if requestAndDump(url, os.path.join(dumpfolder, pairs[i][2] + ".2.json")) == False:
-                    print("Breaking on " + pairs[i][2])
-                    break  
-            else:      
-                print("Breaking on " + pairs[i][2])
-                break
-
-        else:
-            print(pairs[i][2])
-            url = endpoint.format(start=pairs[i][0], end=pairs[i][1], timeframe=timeframe, symbol=symbol)
-            
-            print(url)
-
-            if requestAndDump(url, os.path.join(dumpfolder, pairs[i][2] + ".json")) == False:
-                print("Breaking on " + pairs[i][2])
-                break
-
-        
-        time.sleep(delay)
 
 def _dumpObject(data, filename):
     with open(filename, "w") as file:
         file.write(json.dumps(data))
 
+def _gapAnalysis(data, start, end, interval):
+    _printlog("Performing gap analysis:")
+    
+    if(kline(*data[0]).open_time != start):
+        _printlog("First candle deson't match")
+    if(kline(*data[-1]).close_time != end and kline(*data[-1]).close_time != end - 1):
+        _printlog("Last candle deson't match")
+    
+    for i in range(0, len(data) - 1):
+        curr = kline(*data[i])
+        next = kline(*data[i+1])
+
+        if(curr.close_time + 1 != next.open_time):
+            _printlog("Gap on close: " + str(curr.close_time) + " and open: " + str(next.open_time) + " at " + str(i) + ", difference: " + str(next.open_time - curr.close_time) + ", ratio: " + str((next.open_time - curr.close_time)/interval) + " datetime: " + str(datetime.utcfromtimestamp(curr.close_time/1000)))
+
+
 def fetch(timeframe, toTime: datetime, totalCandles, symbol = "BTCUSDT"):
+    global _log
 
     if timeframe not in supported_timeframes:
         raise "Unsupported timeframe " + str(timeframe)
@@ -139,10 +119,11 @@ def fetch(timeframe, toTime: datetime, totalCandles, symbol = "BTCUSDT"):
     }
 
     store = _createStore(symbol, timeframe)
+    _log = open(os.path.join(store, timeframe + "." + symbol + ".log"), "w")
 
     while remaining > 0:        
-        url = endpoint.format(start=starttick, end=endtick, timeframe=timeframe, symbol=symbol)
-        print(url)
+        url = endpoint.format(start=starttick, end=endtick-1, timeframe=timeframe, symbol=symbol)
+        _printlog(url + "    Time: " + str(datetime.utcfromtimestamp(starttick/1000)))
         success, r = request(url)
 
         if not success:
@@ -153,7 +134,8 @@ def fetch(timeframe, toTime: datetime, totalCandles, symbol = "BTCUSDT"):
 
         if(len(result) != __resultLength):
             _dumpObject(index, os.path.join(store, "index.json"))
-            raise "Data length less than expected length, stopping here"
+            _printlog("Result length less than expected")
+            _gapAnalysis(result, starttick, endtick,interval)
 
 
         first = kline(*result[0])
@@ -173,7 +155,12 @@ def fetch(timeframe, toTime: datetime, totalCandles, symbol = "BTCUSDT"):
     _dumpObject(index, os.path.join(store, "index.json"))
 
 
+
 def fetchLatest(timeframe, totalCandles, symbol = "BTCUSDT"):
     return fetch(timeframe, datetime.now(tz=timezone.utc), totalCandles, symbol)
 
-x = fetchLatest("1m", 1000, symbol = "BTCUSDT")
+def _printlog(msg):
+    print(msg)
+    _log.write(str(msg) + "\n")
+
+_log = None

@@ -140,4 +140,4 @@ cython_debug/
 
 
 # Project specific ignores
-data/store/*
+src/data/store/*

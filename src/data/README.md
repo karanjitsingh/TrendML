@@ -11,11 +11,14 @@ See the sample script below with defined usages for methods on the `DataSeries` 
 
 
 ```python
->>> from data import series                                         # Import the series module
+# Import the series module
+>>> from data import series                      
 
->>> btc1h = series.DataSeries('BTCUSDT', '1h')                      # Create a series for BTC-USDT pair on 1h candles 
+# Create a series for BTC-USDT pair on 1h candles
+>>> btc1h = series.DataSeries('BTCUSDT', '1h')
 
->>> btc1h.getData()                                                 # Fetch data with getData method
+# Fetch data with getData method
+>>> btc1h.getData()
 {'_': array([[1.50294240e+12, 4.26148000e+03, 4.31362000e+03, ...,
         3.51605030e+01, 1.50952478e+05, 7.88763551e+03],
        [1.50294600e+12, 4.30883000e+03, 4.32869000e+03, ...,
@@ -38,23 +41,28 @@ See the sample script below with defined usages for methods on the `DataSeries` 
        1.02289449e+08, 1.42019526e+08, 8.21048732e+07]), 'ignore': array([7887.63551305, 8039.26240152, 8041.76049845, ...,    0.        ,
           0.        ,    0.        ])}
 
->>> btc1h.getData().keys()                                          # getData essentially returns a dictionary of numpy arrays, each column can be accessed with its own keys
+# getData essentially returns a dictionary of numpy arrays, each column can be accessed with its own keys
+>>> btc1h.getData().keys()
 dict_keys(['_', 'open_time', 'open', 'high', 'low', 'close', 'volume', 'close_time', 'quote_asset_volume', 'num_trades', 'taker_buy_base_asset_volume', 'taker_buy_quote_asset_volume', 'ignore'])
 
->>> btc1h.getData()['close']                                        # Accessing the data
+
+# Accessing the data
+>>> btc1h.getData()['close']
 array([ 4308.83,  4315.32,  4324.35, ..., 55348.33, 55651.16, 55426.4 ])
 
 
->>> btc1h.addIndicator('RSI', btc1h.getData()['close'])             # Adding indicators to the data series
+# Adding indicators to the data series
+>>> btc1h.addIndicator('RSI', btc1h.getData()['close'])
 
->>> btc1h.getIndicators()                                           # getIndicators returns a dictionary of fetched indicators
+# getIndicators returns a dictionary of fetched indicators
+>>> btc1h.getIndicators()
 {'RSI': array([        nan,         nan,         nan, ..., 78.725809  ,
        80.21688503, 75.96144231])}
 
->>> btc1h.getIndicators()['RSI']                                    # See TALib API docs to find the individual parameters for each indicator
+# See TALib API docs (link below) to find the individual parameters for each indicator
+>>> btc1h.getIndicators()['RSI']
 array([        nan,         nan,         nan, ..., 78.725809  ,
        80.21688503, 75.96144231])
-
 
 ```
 

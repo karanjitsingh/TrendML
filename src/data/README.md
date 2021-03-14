@@ -45,7 +45,6 @@ See the sample script below with defined usages for methods on the `DataSeries` 
 >>> btc1h.getData().keys()
 dict_keys(['_', 'open_time', 'open', 'high', 'low', 'close', 'volume', 'close_time', 'quote_asset_volume', 'num_trades', 'taker_buy_base_asset_volume', 'taker_buy_quote_asset_volume', 'ignore'])
 
-
 # Accessing the data
 >>> btc1h.getData()['close']
 array([ 4308.83,  4315.32,  4324.35, ..., 55348.33, 55651.16, 55426.4 ])

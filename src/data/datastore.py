@@ -7,12 +7,11 @@ import time
 from collections import namedtuple
 import numpy as np
 
-index_cache = {}
+data_columns = ['open_time', 'open', 'high', 'low', 'close', 'volume', 'close_time', 'quote_asset_volume', 'num_trades', 'taker_buy_base_asset_volume', 'taker_buy_quote_asset_volume', 'ignore', ]
+KLine = namedtuple('KLine', data_columns)
+Pointer = namedtuple('Pointer', ['chunk', 'index'])
 
-kline = namedtuple('kline', ['open_time', 'open', 'high', 'low', 'close', 'volume', 'close_time', 'quote_asset_volume', 'num_trades', 'taker_buy_base_asset_volume', 'taker_buy_quote_asset_volume', 'ignore', ])
-
-
-__datadir = pathlib.Path(__file__).parent.absolute()
+_datadir = pathlib.Path(__file__).parent.absolute()
 __requestRateLimit = 1200/60
 __resultLength = 1000
 
@@ -28,7 +27,7 @@ week = day * 7
 supported_timeframes = ["1m", "2m", "3m", "5m", "10m", "15m", "30m", "1h", "2h", "3h", "4h", "6h", "8h", "10h", "12h", "1d", "2d", "3d", "1w"]
 
 
-def _getInterval(timeframe):
+def getInterval(timeframe):
     period = int(timeframe[0:-1])
     r = 0
     if timeframe[-1] == "m":
@@ -44,29 +43,28 @@ def _getInterval(timeframe):
 
 
 def _createStore(symbol, timeframe):
-    store = os.path.join(__datadir, "store", symbol, timeframe)
+    store = os.path.join(_datadir, "store", symbol, timeframe)
     os.makedirs(store, exist_ok=True)
     return store
 
 
+# def _requestAndDump(url, filename):
+#     success = True
 
-def _requestAndDump(url, filename):
-    success = True
+#     request = requests.get(url)
+#     data = request.content
 
-    request = requests.get(url)
-    data = request.content
+#     if request.status_code == 200:
+#         with open(filename, "w") as file:
+#             file.write(data.__str__()[2:-1])                
+#     else:
+#         _printlog("Non 200 status code")
+#         _printlog("Status Code:", request.status_code)
+#         _printlog(request.headers)
+#         _printlog(request.content)
+#         success = False
 
-    if request.status_code == 200:
-        with open(filename, "w") as file:
-            file.write(data.__str__()[2:-1])                
-    else:
-        _printlog("Non 200 status code")
-        _printlog("Status Code:", request.status_code)
-        _printlog(request.headers)
-        _printlog(request.content)
-        success = False
-
-    return success
+#     return success
 
 def _dumpObject(data, filename):
     with open(filename, "w") as file:
@@ -75,30 +73,27 @@ def _dumpObject(data, filename):
 def _gapAnalysis(data, start, end, interval):
     _printlog("Performing gap analysis:")
     
-    if(kline(*data[0]).open_time != start):
+    if(KLine(*data[0]).open_time != start):
         _printlog("First candle deson't match")
-    if(kline(*data[-1]).close_time != end and kline(*data[-1]).close_time != end - 1):
+    if(KLine(*data[-1]).close_time != end and KLine(*data[-1]).close_time != end - 1):
         _printlog("Last candle deson't match")
     
     for i in range(0, len(data) - 1):
-        curr = kline(*data[i])
-        next = kline(*data[i+1])
+        curr = KLine(*data[i])
+        next = KLine(*data[i+1])
 
         if(curr.close_time + 1 != next.open_time):
             _printlog("Gap on close: " + str(curr.close_time) + " and open: " + str(next.open_time) + " at " + str(i) + ", difference: " + str(next.open_time - curr.close_time) + ", ratio: " + str((next.open_time - curr.close_time)/interval) + " datetime: " + str(datetime.utcfromtimestamp(curr.close_time/1000)))
 
 
 def _scrape(timeframe, toTime: datetime, totalCandles, symbol = "BTCUSDT"):
-    global index_cache
-    if index_cache.has_key(symbol):
-        index_cache.pop(symbol)
 
     global _log
 
     if timeframe not in supported_timeframes:
         raise "Unsupported timeframe " + str(timeframe)
 
-    interval = _getInterval(timeframe)
+    interval = getInterval(timeframe)
     _range = __resultLength * interval 
     endtick = int(toTime.timestamp() * 1000)
     starttick = endtick - _range
@@ -131,8 +126,8 @@ def _scrape(timeframe, toTime: datetime, totalCandles, symbol = "BTCUSDT"):
             _gapAnalysis(result, starttick, endtick,interval)
 
 
-        first = kline(*result[0])
-        last = kline(*result[-1])
+        first = KLine(*result[0])
+        last = KLine(*result[-1])
 
         remaining = remaining - __resultLength
         endtick = first.open_time
@@ -156,17 +151,17 @@ def _printlog(msg):
     print(msg)
     _log.write(str(msg) + "\n")
 
-def _verifyChunk(symbol, timeframe, chunkid):
-    datafolder = os.path.join(__datadir, "store", symbol, timeframe)
+def verifyChunk(symbol, timeframe, chunkid):
+    datafolder = os.path.join(_datadir, "store", symbol, timeframe)
     path = os.path.join(datafolder, str(chunkid) + ".json")
     return os.path.exists(path)
     
 
-def _readChunk(symbol, timeframe, chunkid):
-    datafolder = os.path.join(__datadir, "store", symbol, timeframe)
+def readChunk(symbol, timeframe, chunkid):
+    datafolder = os.path.join(_datadir, "store", symbol, timeframe)
     path = os.path.join(datafolder, str(chunkid) + ".json")
 
-    if not os.path.exists(path)
+    if not os.path.exists(path):
         raise Exception("Chunk " + str(chunkid) + " does not exist in " + symbol + "." + timeframe)
 
     with open(path, 'r') as file:
@@ -180,77 +175,10 @@ def _getNearestOpen(chunk, start):
     while(chunk[i][0] <= start):
         i+=1
 
-    if (i == len(chunk) and start != chunk[i-1])
+    if (i == len(chunk) and start != chunk[i-1]):
         raise Exception("No open found")
     
     return i-1
 
-class Series:
 
-    def __init__(indicators, start, buffer, symbol, timeframe):
-
-        symbol = upper(symbol)
-        timeframe = lower(timeframe)
-
-        datafolder = os.path.join(__datadir, "store", symbol, timeframe)
-        index = os.path.join(datafolder, "index.json")
         
-        # check index exists
-        if not os.path.exists(index):
-            raise Exception("Data store not found for " + str(symbol) + "." + str(timeframe))
-
-        # read index
-        with open(index, 'r') as file:
-            index = json.loads(file.read())
-
-        # sanity check the index
-        if lower(index['time']) != timeframe or upper(index['symbol']) != symbol or (index['index']) == 0:
-            raise Exception("Sanity check fail")
-
-        for r in range(len(index['index'])):
-            if not os.path.exists(os.path.join(datafolder, str(index['index'][r][0]) + ".json"))
-                raise Exception("Sanity check fail")
-
-        self._start = start
-        self._buffer = buffer
-        self._store = datafolder
-        self._buffer_interval = buffer * _getInterval(timeframe)
-        
-        self._buffer_interval = _getInterval(timeframe) * buffer
-        self._indicators = indicators
-        self._chunk = None
-
-        index = np.array(index['index'])
-        open = index[:, 0]
-        close = index[:, 1]
-
-        pointer = None
-        pointer_time = start - self._buffer_interval
-        
-        if pointer_time  < open[0]:
-            raise Exception("start - buffer is less than first available candle")
-
-        # find closes candle start
-        i = 0
-        while i != len(open) and open[i] <= pointer_time 
-            i+=1
-
-        if i == len(open):
-            if(start > close[i-1] - _getInterval(timeframe)):
-                raise Exception("start is higher last available candle")
-            else:
-                self._chunk = _readChunk(symbol, timeframe, open[i-1])
-                pointer = (open[i-1], _getNearestOpen(chunk, pointer_time))
-                
-            pointer = (open[i-1], 0)
-        else:
-            self._chunk = _readChunk(symbol, timeframe, open[i-1])
-            pointer = (open[i-1], _getNearestOpen(chunk, pointer_time))    
-
-        if pointer == None:
-            raise Exception("Missed something")
-            
-        self._pointer = pointer
-
-
-    def get(length):

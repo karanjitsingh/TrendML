@@ -141,3 +141,7 @@ cython_debug/
 
 # Project specific ignores
 src/data/store/*
+
+
+# Personal IDE settings
+**/.vscode/**

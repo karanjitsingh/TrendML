@@ -1,3 +1,4 @@
+import numpy as np
 import pandas as pd
 import talib # Technical Analysis Library (Download both the TA-Lib itself & the Python wrapper)
 
@@ -35,6 +36,29 @@ def gen_X_y(csv_path: str, timeperiod: int):
     # https://stackoverflow.com/questions/18548370/pandas-can-only-compare-identically-labeled-dataframe-objects-error
     y = data['close'][1:].reset_index(drop = True) > data['close'][:-1].reset_index(drop = True)
     y = y[(timeperiod - 1):]
+
+    # Another option of generating truth labels `y`:
+    #   Compare with previous 5 timeframes, instead of simply observing immediate up/down change
+    #   Create a new table with price info of 6 consecutive timeframes in one row.
+    prev5 = pd.concat([
+            # pivot timeframe
+            data['close'][5:].reset_index(drop = True),
+            # previous 5 timeframes
+            data['close'][4:-1].reset_index(drop = True), # 1 frame ago
+            data['close'][3:-2].reset_index(drop = True), # 2 frame ago
+            data['close'][2:-3].reset_index(drop = True), # 3 frame ago
+            data['close'][1:-4].reset_index(drop = True), # 4 frame ago
+            data['close'][:-5].reset_index(drop = True),  # 5 frame ago
+        ],
+        axis = 1
+    )
+    prev5.columns = ['pivot', '1_ago', '2_ago', '3_ago', '4_ago', '5_ago'] # rename columns
+    prev5 = prev5[(timeperiod - 5):]
+    # print(prev5.shape)
+
+    # Example of generating `y` using `prev5`:
+    #     Take minimum of previous 5 days, to check whether the pivot day exceeds the minimum.
+    y = prev5['pivot'] > np.amin(prev5[['1_ago', '2_ago', '3_ago', '4_ago', '5_ago']], axis = 1)
 
     assert(X.shape[0] == y.shape[0])
     return X, y

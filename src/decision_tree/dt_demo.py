@@ -56,9 +56,12 @@ def gen_X_y(csv_path: str, timeperiod: int):
     yn1 = yn1[(timeperiod - 1):]
     yn2 = yn2[(timeperiod - 1):]
     yn3 = yn3[(timeperiod - 1):]
+    yn4 = yn4[(timeperiod - 1):]
+    yn5=  yn5[(timeperiod - 1):]
+
 
     for i in range(len(yn3)):
-        y2[i] = yn1[i] or yn2[i] or yn3[i]
+        y2[i] = yn1[i] or yn2[i] or yn3[i] or yn4[i] or yn5[i]
 
     y2= y2[(timeperiod -1):]
     y = y2

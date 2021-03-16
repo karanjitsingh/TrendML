@@ -47,24 +47,19 @@ def _createStore(symbol, timeframe):
     os.makedirs(store, exist_ok=True)
     return store
 
+def request(url):
+    success = True
 
-# def _requestAndDump(url, filename):
-#     success = True
+    request = requests.get(url)
 
-#     request = requests.get(url)
-#     data = request.content
+    if request.status_code !=  200:
+        _printlog("Non 200 status code")
+        _printlog(request.status_code)
+        _printlog(request.headers)
+        _printlog(request.content)
+        success = False
 
-#     if request.status_code == 200:
-#         with open(filename, "w") as file:
-#             file.write(data.__str__()[2:-1])                
-#     else:
-#         _printlog("Non 200 status code")
-#         _printlog("Status Code:", request.status_code)
-#         _printlog(request.headers)
-#         _printlog(request.content)
-#         success = False
-
-#     return success
+    return [success, request]
 
 def _dumpObject(data, filename):
     with open(filename, "w") as file:
@@ -86,7 +81,7 @@ def _gapAnalysis(data, start, end, interval):
             _printlog("Gap on close: " + str(curr.close_time) + " and open: " + str(next.open_time) + " at " + str(i) + ", difference: " + str(next.open_time - curr.close_time) + ", ratio: " + str((next.open_time - curr.close_time)/interval) + " datetime: " + str(datetime.utcfromtimestamp(curr.close_time/1000)))
 
 
-def _scrape(timeframe, toTime: datetime, totalCandles, symbol = "BTCUSDT"):
+def fetch(timeframe, toTime: datetime, totalCandles, symbol = "BTCUSDT"):
 
     global _log
 
@@ -120,6 +115,11 @@ def _scrape(timeframe, toTime: datetime, totalCandles, symbol = "BTCUSDT"):
         
         result = json.loads(r.content)
 
+        if len(result) == 0:
+            _printlog("Request returned empty data, assuming beginning of time")
+            break
+
+
         if(len(result) != __resultLength):
             _dumpObject(index, os.path.join(store, "index.json"))
             _printlog("Result length less than expected")
@@ -144,8 +144,8 @@ def _scrape(timeframe, toTime: datetime, totalCandles, symbol = "BTCUSDT"):
 
 
 
-def _scrapeLatest(timeframe, totalCandles, symbol = "BTCUSDT"):
-    return _scrape(timeframe, datetime.now(tz=timezone.utc), totalCandles, symbol)
+def fetchLatest(timeframe, totalCandles, symbol = "BTCUSDT"):
+    return fetch(timeframe, datetime.now(tz=timezone.utc), totalCandles, symbol)
 
 def _printlog(msg):
     print(msg)

@@ -64,7 +64,7 @@ def gen_X_y(csv_path: str, timeperiod: int, indicator_list:list):
     y = y[(timeperiod - 1):]
 
 
-    ### Checks if any of the next 5 closes is greater than current close
+    ### Checks if any of the next 5 closes is greater than current close by 5% or more
     #yn = y.to_numpy()
     yn1 = np.where(data['close'].shift(-1) > 1.05*data['close'], 1, 0)
     yn2 = np.where(data['close'].shift(-2) > 1.05*data['close'], 1, 0)

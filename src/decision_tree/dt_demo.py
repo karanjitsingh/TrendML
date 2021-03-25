@@ -9,13 +9,14 @@ import matplotlib.pyplot as plt
 
 
 
-def gen_X_y(csv_path: str, timeperiod: int, indicator_list:list):
+def gen_X_y(csv_path: str, timeperiod: int, indicator_list:list, long:bool):
     """Calculate technical indicators & truth labels
 
   Args:
   csv_path: path to .csv file that contains historic price data
   timeperiod: # of timeperiods to be used for calculating technical indicators
   indicator_list: list of indicator indices to be used from indicator_sets_ref
+  Long: 1 for long(buy) and 0 for short(sell)
 
   Returns:
       (X, y): (feature matrix, truth labels)
@@ -66,24 +67,49 @@ def gen_X_y(csv_path: str, timeperiod: int, indicator_list:list):
 
     ### Checks if any of the next 5 closes is greater than current close by 5% or more
     #yn = y.to_numpy()
-    yn1 = np.where(data['close'].shift(-1) > 1.05*data['close'], 1, 0)
-    yn2 = np.where(data['close'].shift(-2) > 1.05*data['close'], 1, 0)
-    yn3 = np.where(data['close'].shift(-3) > 1.05*data['close'], 1, 0)
-    yn4 = np.where(data['close'].shift(-4) > 1.05*data['close'], 1, 0)
-    yn5 = np.where(data['close'].shift(-5) > 1.05*data['close'], 1, 0)
+    if long:
+        yn1 = np.where(data['close'].shift(-1) > 1.05*data['close'], 1, 0)
+        yn2 = np.where(data['close'].shift(-2) > 1.05*data['close'], 1, 0)
+        yn3 = np.where(data['close'].shift(-3) > 1.05*data['close'], 1, 0)
+        yn4 = np.where(data['close'].shift(-4) > 1.05*data['close'], 1, 0)
+        yn5 = np.where(data['close'].shift(-5) > 1.05*data['close'], 1, 0)
 
-    yn1 = yn1[(timeperiod - 1):]
-    yn2 = yn2[(timeperiod - 1):]
-    yn3 = yn3[(timeperiod - 1):]
-    yn4 = yn4[(timeperiod - 1):]
-    yn5 = yn5[(timeperiod - 1):]
+        yn1 = yn1[(timeperiod - 1):]
+        yn2 = yn2[(timeperiod - 1):]
+        yn3 = yn3[(timeperiod - 1):]
+        yn4 = yn4[(timeperiod - 1):]
+        yn5 = yn5[(timeperiod - 1):]
 
-    print('prices',y,'\n',yn1,'\n',yn2,'\n',yn3,'\n',yn4,'\n',yn5)
-    for i in range(len(yn3)):
-        y2[i] = yn1[i] or yn2[i] or yn3[i] or yn4[i] or yn5[i]
+        print('prices',y,'\n',yn1,'\n',yn2,'\n',yn3,'\n',yn4,'\n',yn5)
+        for i in range(len(yn3)):
+            y2[i] = yn1[i] or yn2[i] or yn3[i] or yn4[i] or yn5[i]
 
-    y2= y2[(timeperiod -1):]
-    y = y2
+        y2= y2[(timeperiod -1):]
+        y = y2
+
+    else:
+        perc = 1 - 0.05
+        yn1 = np.where(data['close'].shift(-1) < perc * data['close'], 1, 0)
+        yn2 = np.where(data['close'].shift(-2) < perc * data['close'], 1, 0)
+        yn3 = np.where(data['close'].shift(-3) < perc * data['close'], 1, 0)
+        yn4 = np.where(data['close'].shift(-4) < perc * data['close'], 1, 0)
+        yn5 = np.where(data['close'].shift(-5) < perc * data['close'], 1, 0)
+
+        yn1 = yn1[(timeperiod - 1):]
+        yn2 = yn2[(timeperiod - 1):]
+        yn3 = yn3[(timeperiod - 1):]
+        yn4 = yn4[(timeperiod - 1):]
+        yn5 = yn5[(timeperiod - 1):]
+
+        print('prices', '\n', yn1[0:50],yn5[40:80])
+        for i in range(len(yn3)):
+            y2[i] = yn1[i] or yn2[i] or yn3[i] or yn4[i] or yn5[i]
+
+        y2 = y2[(timeperiod - 1):]
+        y = y2
+
+        print('y2',y2)
+
     #print('yn',yn1[10:20],yn2[10:20],yn3[10:20], 'y2\n',y2[10:20])
 
     #print('shapes',X.shape, y2.shape, y.shape)
@@ -108,23 +134,33 @@ if __name__ == '__main__':
         keys = list(indicator_sets_ref.keys())
         #print('dd',list(np.random.choice(keys,3,replace=True)))
         indicator_list = list(np.random.choice(keys,3,replace=False))
-        X, y = gen_X_y(csv_path='./csvs/rev_Binance_BTCUSDT_d.csv', timeperiod=60, indicator_list=indicator_list)
+        X, y = gen_X_y(csv_path='./csvs/rev_Binance_BTCUSDT_d.csv', timeperiod=60, indicator_list=indicator_list, long=True)
         accuracy = 0
         # Split train/test sets
-        for c in range(5):
+        iters = 5
+        for c in range(iters):
             X_train, X_test, y_train, y_test = train_test_split(X, y)
-            # print(X_train.shape, X_test.shape, y_train.shape, y_test.shape)
+            print('train,test',X_train.shape, X_test.shape, y_train.shape, y_test.shape)
 
-            dt_clf = tree.DecisionTreeClassifier().fit(X_train, y_train)
+            dt_clf = tree.DecisionTreeClassifier(max_depth=3).fit(X_train, y_train)
 
             # Predict class labels
             y_test_pred = dt_clf.predict(X_test)
             # Predict probability for each class label (Could be used as `confidence` measure)
-            # dt_clf.predict_proba(X_test)
+            #y_conf = dt_clf.predict_proba(X_test)
+            #print('y conf',y_conf)
+
+            plt.figure(0)
+            tree.plot_tree(dt_clf)
+            #plt.show()
+
+            from sklearn.tree import export_text
+            r = export_text(dt_clf, feature_names=indicator_list)
+            print('r',r)
 
             accuracy = accuracy + accuracy_score(y_test, y_test_pred)
 
-        accuracy_mean = accuracy/5
+        accuracy_mean = accuracy/iters
         y_acc.append(accuracy_mean*100)
         x_ind.append(str(indicator_list[0])+'-'+str(indicator_list[1])+'-'+str(indicator_list[2]))
 

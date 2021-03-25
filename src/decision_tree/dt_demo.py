@@ -31,9 +31,8 @@ def gen_X_y(csv_path: str, timeperiod: int):
     # Merge multiple feature `Series` into a single Pandas `DataFrame`.
     X = pd.concat([sma, rsi, beta], axis=1)
 
-    # Why am I using `.reset_index`? :
-    # https://stackoverflow.com/questions/18548370/pandas-can-only-compare-identically-labeled-dataframe-objects-error
-    y = data['close'][1:].reset_index(drop = True) > data['close'][:-1].reset_index(drop = True)
+    # `.values` of a Pandas dataframe refers to its NumPy array representation.
+    y = data['close'][1:].values > data['close'][:-1].values
     y = y[(timeperiod - 1):]
 
     assert(X.shape[0] == y.shape[0])

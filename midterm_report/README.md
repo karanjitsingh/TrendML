@@ -73,6 +73,13 @@ how we generate truth labels and features from raw price data.
   * TODO
 ______
 
+#### Contributions
+* Himanshu Gupta : 
+* Karan Singh : 
+* Tien Le : 
+* Vikas Rao : 
+* Youngsuk Kim : 
+
 #### References 
 
 [Akyildirim, E., Goncu, A., & Sensoy, A. (2020). Prediction of cryptocurrency returns using machine learning. Annals of Operations Research, 297(1-2), 3-36. doi:10.1007/s10479-020-03575-y](https://www.researchgate.net/publication/340500312_Prediction_of_cryptocurrency_returns_using_machine_learning)

@@ -20,11 +20,11 @@ how we generate truth labels and features from raw price data.
 
 #### Defining & Generating truth labels (`y`)
 * **`Buy trend`** (`y` for training **BUY** classifier)
-  * Inspect last 5 timeframes, and the `y` is TRUE if current frame price is higher than all of the 5 last timeframes.
+  * Inspect the next 5 timeframes, and the `y` is TRUE if the closing price of any of those frames is higher than the current frame by 5% or more.
 * **`Sell trend`** (`y` for training **SELL** classifier)
-  * TODO
+  * Inspect the next 5 timeframes, and the `y` is TRUE if the closing price of any of those frames is lower than the current frame by 5% or more.
 * Follow-up Questions
-  * Are our Buy/Sell trend signals justifiable? How much are they helpful in gaining actual profit?
+  * Are our Buy/Sell trend signals justifiable? How much are they helpful in gaining actual profit? 
 
 #### Defining & Generating features (`X`)
 * We use **technical indicators** as features.
@@ -46,6 +46,9 @@ how we generate truth labels and features from raw price data.
 
 #### Decision Tree (Supervised Learning)
 * Used [`sklearn.tree.DecisionTreeClassifier`](https://scikit-learn.org/stable/modules/generated/sklearn.tree.DecisionTreeClassifier.html)
+
+* Method
+  Decision tree is a simple but effective machine learning technique that can be used for classification tasks. In this project, We use it for the purpose of selecting the best   set of features among several available features. In Technical Analysis, different approaches make use of different indicators to observe a pattern and determine the stock       trends. More often than not, a set of 2-3 indicators are used in combination rather than just one for better accuracy. It is a challenge to identify which set performs better,   so we make use of decision trees to identify them for us. We have considered 8 commonly used indicators ( SMA21, SMA50, EMA21, EMA50, RSI, MFI, ADX, ATR ) as features. A set     of 3 among them are selected randomly and provided as features to the decision tree. The classification is done separately for 'BUY' or 'Long' and 'SELL' or 'Short' based on     the truth labels as defined in sec 4.1. The training and test data split is handled by the sklearn library and the resulting accuracy is calculated. This process is repeated     several times considering a different set of indicators again selected randomly from the pool. The indicator set with the highest accuracy is selected as the best or the most   relavant indicators to be used for the asset.
 
 * Results & Discussion
   * TODO

@@ -51,7 +51,14 @@ how we generate truth labels and features from raw price data.
   Decision tree is a simple but effective machine learning technique that can be used for classification tasks. In this project, We use it for the purpose of selecting the best   set of features among several available features. In Technical Analysis, different approaches make use of different indicators to observe a pattern and determine the stock       trends. More often than not, a set of 2-3 indicators are used in combination rather than just one for better accuracy. It is a challenge to identify which set performs better,   so we make use of decision trees to identify them for us. We have considered 8 commonly used indicators ( SMA21, SMA50, EMA21, EMA50, RSI, MFI, ADX, ATR ) as features. A set     of 3 among them are selected randomly and provided as features to the decision tree. The classification is done separately for 'BUY' or 'Long' and 'SELL' or 'Short' based on     the truth labels as defined in sec 4.1. The training and test data split is handled by the sklearn library and the resulting accuracy is calculated. This process is repeated     several times considering a different set of indicators again selected randomly from the pool. The indicator set with the highest accuracy is selected as the best or the most   relavant indicators to be used for the asset.
 
 * Results & Discussion
-  * TODO
+  The graph below plots the selected indicator sets on the x axis with the obtained accuracy in the y axis. We can observe that the combination 8-7-2 or (ATR, ADX and SMA50)       provides the best estimate of the trend among the selected indicators as it has the highest accuracy.
+  ![image](https://user-images.githubusercontent.com/48078197/113922177-f7aab780-97b4-11eb-87ac-7a8839c21f92.png)
+  
+  The below image shows the branch traversal of the decision tree to reach the classification or the leaf nodes. It is important to note that the max depth of the tree has been   selected as 3 to limit overfitting as technical indicators are very prone to overfit the data in stock trend and price prediction. To give us a better evidence and further       control overfitting, another constraint has been placed where each leaf is considered valid only if there are atleast 25 samples in it.
+  ![image](https://user-images.githubusercontent.com/48078197/113923315-6b00f900-97b6-11eb-84e1-636756fec762.png)
+ 
+  
+
 
 #### Linear Models (Supervised Learning)
 * Ridge Regression

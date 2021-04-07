@@ -57,8 +57,36 @@ how we generate truth labels and features from raw price data.
   *The below image shows the branch traversal of the decision tree to reach the classification or the leaf nodes. It is important to note that the max depth of the tree has been   selected as 3 to limit overfitting as technical indicators are very prone to overfit the data in stock trend and price prediction. To give us a better evidence and further       control overfitting, another constraint has been placed where each leaf is considered valid only if there are atleast 25 samples in it.
   ![image](https://user-images.githubusercontent.com/48078197/113923315-6b00f900-97b6-11eb-84e1-636756fec762.png)
   
-  The gini index is a metric used to measure the purity of the node. It is similar to entropy in use and can be used to observe the quality of the split. Gini is defined as - 
-  ![image](https://user-images.githubusercontent.com/48078197/113924002-3fcad980-97b7-11eb-8636-f6c60755246d.png)
+  The gini index is a metric used to measure the purity of the node. It is similar to entropy in use and can be used to observe the quality of the split. 
+  GiniIndex=1–∑_i (p^2)_i
+  
+  By printing out the decision tree, we can get a better understanding of how the split and decision is done at each node and how each indicator is being considered. For the       above selection, the tree is represented as - 
+  1: 'sma21', 2: 'sma50', 3: 'ema21', 4: 'ema50', 5: 'rsi14', 6: 'mfi10', 7:'adx', 8:'atr'
+
+  |--- 2 <= 10808.51
+  |   |--- 8 <= 1084.19
+  |   |   |--- 2 <= 5198.32
+  |   |   |   |--- class: False
+  |   |   |--- 2 >  5198.32
+  |   |   |   |--- class: False
+  |   |--- 8 >  1084.19
+  |   |   |--- 8 <= 3901.93
+  |   |   |   |--- class: True
+  |   |   |--- 8 >  3901.93
+  |   |   |   |--- class: True
+  |--- 2 >  10808.51
+  |   |--- 8 <= 1208.95
+  |   |   |--- 7 <= 28.66
+  |   |   |   |--- class: True
+  |   |   |--- 7 >  28.66
+  |   |   |   |--- class: True
+  |   |--- 8 >  1208.95
+  |   |   |--- 2 <= 29431.01
+  |   |   |   |--- class: False
+  |   |   |--- 2 >  29431.01
+  |   |   |   |--- class: True
+  
+  classification accuracy for atr, adx, sma50 :0.7161290322580646 
 
 
 

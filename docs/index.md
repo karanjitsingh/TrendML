@@ -5,6 +5,7 @@ filename: index
 --- 
 
 ## Project Midterm Report
+# Trend Analysis for Cryptocurrencies and other Assets. (Team 6) 
 
 ### Introduction/Background: 
 
@@ -67,34 +68,34 @@ how we generate truth labels and features from raw price data.
   GiniIndex = 1&nbsp; –&nbsp; $\sum_{i=1}^n$ $p^2_i$ 
   
   By printing out the decision tree, we can get a better understanding of how the split and decision is done at each node and how each indicator is being considered. For the       above selection, the tree is represented as -  
-    
-  1: 'sma21', 2: 'sma50', 3: 'ema21', 4: 'ema50', 5: 'rsi14', 6: 'mfi10', 7:'adx', 8:'atr'  
-    
-  
+
+  ```
+  1: 'sma21', 2: 'sma50', 3: 'ema21', 4: 'ema50', 5: 'rsi14', 6: 'mfi10', 7:'adx', 8:'atr' 
   |--- 2 <= 10808.51  
-  |&nbsp;&nbsp;   |--- 8 <= 1084.19  
-  |&nbsp;&nbsp;   |&nbsp;&nbsp;   |--- 2 <= 5198.32  
-  |&nbsp;&nbsp;   |&nbsp;&nbsp;   |&nbsp;&nbsp;   |--- class: False  
-  |&nbsp;&nbsp;   |&nbsp;&nbsp;   |--- 2 >  5198.32  
-  |&nbsp;&nbsp;   |&nbsp;&nbsp;   |&nbsp;&nbsp;   |--- class: False  
-  |&nbsp;&nbsp;   |--- 8 >  1084.19  
-  |&nbsp;&nbsp;   |&nbsp;&nbsp;   |--- 8 <= 3901.93  
-  |&nbsp;&nbsp;   |&nbsp;&nbsp;   |&nbsp;&nbsp;   |--- class: True  
-  |&nbsp;&nbsp;   |&nbsp;&nbsp;   |--- 8 >  3901.93  
-  |&nbsp;&nbsp;   |&nbsp;&nbsp;   |&nbsp;&nbsp;   |--- class: True  
+  ||--- 8 <= 1084.19  
+  |||--- 2 <= 5198.32  
+  ||||--- class: False  
+  |||--- 2 >  5198.32  
+  ||||--- class: False  
+  ||--- 8 >  1084.19  
+  |||--- 8 <= 3901.93  
+  ||||--- class: True  
+  |||--- 8 >  3901.93  
+  ||||--- class: True  
   |--- 2 >  10808.51  
-  |&nbsp;&nbsp;   |--- 8 <= 1208.95  
-  |&nbsp;&nbsp;   |&nbsp;&nbsp;   |--- 7 <= 28.66  
-  |&nbsp;&nbsp;   |&nbsp;&nbsp;   |&nbsp;&nbsp;   |--- class: True  
-  |&nbsp;&nbsp;   |&nbsp;&nbsp;   |--- 7 >  28.66  
-  |&nbsp;&nbsp;   |&nbsp;&nbsp;   |&nbsp;&nbsp;   |--- class: True  
-  |&nbsp;&nbsp;   |--- 8 >  1208.95  
-  |&nbsp;&nbsp;   |&nbsp;   |--- 2 <= 29431.01  
-  |&nbsp;&nbsp;   |&nbsp;&nbsp;   |&nbsp;&nbsp;   |--- class: False  
-  |&nbsp;&nbsp;   |&nbsp;&nbsp;   |--- 2 >  29431.01  
-  |&nbsp;&nbsp;   |&nbsp;&nbsp;   |&nbsp;&nbsp;   |--- class: True  
+  ||--- 8 <= 1208.95  
+  |||--- 7 <= 28.66  
+  ||||--- class: True  
+  |||--- 7 >  28.66  
+  ||||--- class: True  
+  ||--- 8 >  1208.95  
+  |||--- 2 <= 29431.01  
+  ||||--- class: False  
+  |||--- 2 >  29431.01  
+  ||||--- class: True  
   
-  classification accuracy for atr, adx, sma50 :&nbsp;0.7161290322580646 
+  classification accuracy for atr, adx, sma50 : 0.7161290322580646 
+  ```
 
 By changing the tree parameters and constraints such as max depth, minimum nodes and trend thresholds, we can obtain a better picture of the selected indicators and it can be a significant help for traders in identifying the right indicators to use in their trading. The focus here is not on the absolute metric of accuracy but rather the relative measure of accuracy among different indicator sets as shown below:   
 **Indicator sets**: ['4-8-1', '4-7-5', '3-6-7', '8-7-2', '8-2-3', '7-1-8', '3-5-4', '7-4-8']   
@@ -166,6 +167,7 @@ The linear models trained on the truncated datasets exhibit test set accuracy ar
 After exploring the linear regression models, we tried another supervised machine learning model - support vector machine (SVM). We used SVM's non-linear radial kernal for classification. We used the cleaned balanced data (50/50). We checked the accuracy of the SVM model on various C Parameter. C Parameter tells the SVM optimization how much mis-classification you want to avoid on each training example. For large values of C, the optimization chooses a smaller-margin hyperplane if that hyperplane does a better job of getting all the training points classified correctly. As large values of C could lead to overfitting and small values lead to lower accuracy, We picked C =10^3 as an optimum value.
 
 Table 1: SVM Radial Model Trained on truncated 1hour-scale data
+
 | Model # | C Value |  Train Accuracy | Test Accuracy |
 |---------|---------|-----------------|---------------|
 | 1       | 1e-5    | 0.5027          | 0.491         |
@@ -175,6 +177,7 @@ Table 1: SVM Radial Model Trained on truncated 1hour-scale data
 | 5       | 1e5     | 0.6598          | 0.6317        |
 
 Table 2: SVM Radial Model Trained on truncated 1d-scale data
+
 | Model # | C Value |  Train Accuracy | Test Accuracy |
 |---------|---------|-----------------|---------------|
 | 1       | 1e-5    | 0.5014          | 0.4957        |
@@ -283,6 +286,5 @@ ______
 
 [Liew, J., Li, R., Budavári, T., & Sharma, A. (2019). Cryptocurrency investing examined. The Journal of the British Blockchain Association, 2(2), 1-12. doi:10.31585/jbba-2-2-(2)2019](https://www.researchgate.net/publication/337011389_Cryptocurrency_Investing_Examined)
 
-Udacity. (n.d.). Machine Learning for Trading. Lecture. Retrieved April 8, 2021, from https://classroom.udacity.com/courses/ud501
 
 

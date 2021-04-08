@@ -160,6 +160,7 @@ The linear models trained on the truncated datasets exhibit test set accuracy ar
 After exploring the linear regression models, we tried another supervised machine learning model - support vector machine (SVM). We used SVM's non-linear radial kernal for classification. We used the cleaned balanced data (50/50). We checked the accuracy of the SVM model on various C Parameter. C Parameter tells the SVM optimization how much mis-classification you want to avoid on each training example. For large values of C, the optimization chooses a smaller-margin hyperplane if that hyperplane does a better job of getting all the training points classified correctly. As large values of C could lead to overfitting and small values lead to lower accuracy, We picked C =10^3 as an optimum value.
 
 Table 1: SVM Radial Model Trained on truncated 1hour-scale data
+
 | Model # | C Value |  Train Accuracy | Test Accuracy |
 |---------|---------|-----------------|---------------|
 | 1       | 1e-5    | 0.5027          | 0.491         |
@@ -169,6 +170,7 @@ Table 1: SVM Radial Model Trained on truncated 1hour-scale data
 | 5       | 1e5     | 0.6598          | 0.6317        |
 
 Table 2: SVM Radial Model Trained on truncated 1d-scale data
+
 | Model # | C Value |  Train Accuracy | Test Accuracy |
 |---------|---------|-----------------|---------------|
 | 1       | 1e-5    | 0.5014          | 0.4957        |

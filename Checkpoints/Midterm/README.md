@@ -1,8 +1,8 @@
-# Trend Analysis for Cryptocurrencies and other Assets. (Team 6) 
+## Project Midterm Report 
 
 ### Introduction/Background: 
 
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Cryptocurrency is drawing more and more attention from investors as more people are interested in decentralized finance. Predicting the trend of assets plays an important role in traders’ decision to buy or sell. There have been many studies on using machine learning techniques to predict the prices of Bitcoin. For example, Mallqui & Fernandes found the Support Vector Machines (SVM) algorithm performed best in forecasting the Bitcoin exchange rates, while the combination of Recurrent Neural Networks and a Tree classifier performed best in predicting the Bitcoin price direction (2019). Another study also found that SVM algorithm is a reliable forecasting model for cryptocurrency (Hitam& Ismail, 2018). 
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Cryptocurrency is draswing more and more attention from investors as more people are interested in decentralized finance. Predicting the trend of assets plays an important role in traders’ decision to buy or sell. There have been many studies on using machine learning techniques to predict the prices of Bitcoin. For example, Mallqui & Fernandes found the Support Vector Machines (SVM) algorithm performed best in forecasting the Bitcoin exchange rates, while the combination of Recurrent Neural Networks and a Tree classifier performed best in predicting the Bitcoin price direction (2019). Another study also found that SVM algorithm is a reliable forecasting model for cryptocurrency (Hitam& Ismail, 2018). 
 
 ### Problem definition: 
 
@@ -61,34 +61,34 @@ how we generate truth labels and features from raw price data.
   GiniIndex = 1&nbsp; –&nbsp; $\sum_{i=1}^n$ $p^2_i$ 
   
   By printing out the decision tree, we can get a better understanding of how the split and decision is done at each node and how each indicator is being considered. For the       above selection, the tree is represented as -  
-    
-  1: 'sma21', 2: 'sma50', 3: 'ema21', 4: 'ema50', 5: 'rsi14', 6: 'mfi10', 7:'adx', 8:'atr'  
-    
-  
+
+  ```
+  1: 'sma21', 2: 'sma50', 3: 'ema21', 4: 'ema50', 5: 'rsi14', 6: 'mfi10', 7:'adx', 8:'atr' 
   |--- 2 <= 10808.51  
-  |&nbsp;&nbsp;   |--- 8 <= 1084.19  
-  |&nbsp;&nbsp;   |&nbsp;&nbsp;   |--- 2 <= 5198.32  
-  |&nbsp;&nbsp;   |&nbsp;&nbsp;   |&nbsp;&nbsp;   |--- class: False  
-  |&nbsp;&nbsp;   |&nbsp;&nbsp;   |--- 2 >  5198.32  
-  |&nbsp;&nbsp;   |&nbsp;&nbsp;   |&nbsp;&nbsp;   |--- class: False  
-  |&nbsp;&nbsp;   |--- 8 >  1084.19  
-  |&nbsp;&nbsp;   |&nbsp;&nbsp;   |--- 8 <= 3901.93  
-  |&nbsp;&nbsp;   |&nbsp;&nbsp;   |&nbsp;&nbsp;   |--- class: True  
-  |&nbsp;&nbsp;   |&nbsp;&nbsp;   |--- 8 >  3901.93  
-  |&nbsp;&nbsp;   |&nbsp;&nbsp;   |&nbsp;&nbsp;   |--- class: True  
+  ||--- 8 <= 1084.19  
+  |||--- 2 <= 5198.32  
+  ||||--- class: False  
+  |||--- 2 >  5198.32  
+  ||||--- class: False  
+  ||--- 8 >  1084.19  
+  |||--- 8 <= 3901.93  
+  ||||--- class: True  
+  |||--- 8 >  3901.93  
+  ||||--- class: True  
   |--- 2 >  10808.51  
-  |&nbsp;&nbsp;   |--- 8 <= 1208.95  
-  |&nbsp;&nbsp;   |&nbsp;&nbsp;   |--- 7 <= 28.66  
-  |&nbsp;&nbsp;   |&nbsp;&nbsp;   |&nbsp;&nbsp;   |--- class: True  
-  |&nbsp;&nbsp;   |&nbsp;&nbsp;   |--- 7 >  28.66  
-  |&nbsp;&nbsp;   |&nbsp;&nbsp;   |&nbsp;&nbsp;   |--- class: True  
-  |&nbsp;&nbsp;   |--- 8 >  1208.95  
-  |&nbsp;&nbsp;   |&nbsp;   |--- 2 <= 29431.01  
-  |&nbsp;&nbsp;   |&nbsp;&nbsp;   |&nbsp;&nbsp;   |--- class: False  
-  |&nbsp;&nbsp;   |&nbsp;&nbsp;   |--- 2 >  29431.01  
-  |&nbsp;&nbsp;   |&nbsp;&nbsp;   |&nbsp;&nbsp;   |--- class: True  
+  ||--- 8 <= 1208.95  
+  |||--- 7 <= 28.66  
+  ||||--- class: True  
+  |||--- 7 >  28.66  
+  ||||--- class: True  
+  ||--- 8 >  1208.95  
+  |||--- 2 <= 29431.01  
+  ||||--- class: False  
+  |||--- 2 >  29431.01  
+  ||||--- class: True  
   
-  classification accuracy for atr, adx, sma50 :&nbsp;0.7161290322580646 
+  classification accuracy for atr, adx, sma50 : 0.7161290322580646 
+  ```
 
 By changing the tree parameters and constraints such as max depth, minimum nodes and trend thresholds, we can obtain a better picture of the selected indicators and it can be a significant help for traders in identifying the right indicators to use in their trading. The focus here is not on the absolute metric of accuracy but rather the relative measure of accuracy among different indicator sets as shown below:   
 **Indicator sets**: ['4-8-1', '4-7-5', '3-6-7', '8-7-2', '8-2-3', '7-1-8', '3-5-4', '7-4-8']   

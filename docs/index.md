@@ -4,8 +4,7 @@ layout: template
 filename: index
 --- 
 
-## Project Midterm Report
-# Trend Analysis for Cryptocurrencies and other Assets. (Team 6) 
+## Project Midterm Report 
 
 ### Introduction/Background: 
 

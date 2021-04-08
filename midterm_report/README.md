@@ -169,7 +169,8 @@ Most of the time, we don't know the transition or/ and the reward function, so o
 In Q-learning, we want to optimize discounted reward: 
 ` 	∑_(i=0)^∞ γ^(i-1) r_i  (O ≤ γ ≤1.0)
 `
--	Gamma (γ) is strongly related to interest rate. For example, if gamma = 0.95, it means each step in the future is worth 5% less than the immediate reward if we got it right away.
+
+Gamma (γ) is strongly related to interest rate. For example, if gamma = 0.95, it means each step in the future is worth 5% less than the immediate reward if we got it right away.
 
 
 In Q-learning, we will have a Q table that represents the value of taking action a in state s.
@@ -185,6 +186,8 @@ Q-learning procedure
 -	Iterate over time <s,a,s’,s>
 -	Test policy pi
 -	Repeat until converge
+
+
 Details of Iterate over time <s,a,s’,s>:
 -	Set start time, init Q[] (small, random number)
 -	Compute s (prices of our cryptocurrencies)
@@ -206,12 +209,13 @@ Here:
 
 Recap:
 -	Building a model:
-o	Define states, actions, rewards
-o	Choose in-sample training period
-o	Iterate: Q-table update
-o	Backtest
+* Define states, actions, rewards
+* Choose in-sample training period
+* Iterate: Q-table update
+* Backtest
+
 -	Testing a model:
-o	Backtest on later data
+* Backtest on later data
 
 - Advantages: Q-learning can easily be applied to domains where all states and/or transitions are not fully defined
 

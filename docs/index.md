@@ -265,12 +265,12 @@ Challenges: reward (e.g. for buying a stock) often comes in the future - represe
   * TODO
 ______
 
-#### Contributions
-* Himanshu Gupta : 
-* Karan Singh : 
-* Tien Le : 
-* Vikas Rao : 
-* Youngsuk Kim : 
+#### Contributors
+* Himanshu Gupta
+* Karan Singh
+* Tien Le
+* Vikas Rao
+* Youngsuk Kim
 
 #### References 
 

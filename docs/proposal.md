@@ -1,5 +1,5 @@
 ---
-title: Trend Analysis for Cryptocurrencies and Other Assets!
+title: Trend Analysis for Cryptocurrencies and Other Assets
 layout: template
 filename: proposal
 --- 

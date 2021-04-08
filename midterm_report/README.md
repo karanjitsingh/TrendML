@@ -158,7 +158,7 @@ The linear models trained on the truncated datasets exhibit test set accuracy ar
 In Reinforcement Learning, we will have an agent that will take in a state of an environment (s), then look up the policy (Pi) on what it should do and output an action (a). There will be reward (r) associated with an action that the agent decides to take. If the action changes the environment, then we will have a new state of an environment then the circle repeats again, the agent will look up the policy and output an action. The objective of the agent is to take actions that optimize the reward over time.
 In the context of trading, actions include buy, sell, and hold. Reward could be return from trade or daily return. States are factors about our assets(stocks/ cryptocurrencies) that we might observe and know about like prices.
 This is also called Markov decision problem which include:
-*  sets of states s
+*  set of states s
 *  set of actions a 
 *  transition function T[s,a,s']: a three-dimensional object that records the probability that if we are at state s and take action a we will end up at state s'
 *  reward function R[s,a] 
@@ -208,13 +208,15 @@ Here:
 -	α ∈ [0, 1] (alpha) is the learning rate used to vary the weight given to new experiences compared with past Q-values.
 
 Recap:
--	Building a model:
+
+Building a model:
 * Define states, actions, rewards
 * Choose in-sample training period
 * Iterate: Q-table update
 * Backtest
 
--	Testing a model:
+
+Testing a model:
 * Backtest on later data
 
 - Advantages: Q-learning can easily be applied to domains where all states and/or transitions are not fully defined

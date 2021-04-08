@@ -219,9 +219,11 @@ Building a model:
 Testing a model:
 * Backtest on later data
 
-- Advantages: Q-learning can easily be applied to domains where all states and/or transitions are not fully defined
 
-- Challenges: reward (e.g. for buying a stock) often comes in the future - representing that properly requires look-ahead and careful weighting, taking random actions (such as trades) just to learn a good strategy is not really feasible because it will cost us lots of money (Reference: Udacity).
+Advantages: Q-learning can easily be applied to domains where all states and/or transitions are not fully defined
+
+
+Challenges: reward (e.g. for buying a stock) often comes in the future - representing that properly requires look-ahead and careful weighting, taking random actions (such as trades) just to learn a good strategy is not really feasible because it will cost us lots of money (Reference: Udacity).
 
 
 #### Results & Discussion

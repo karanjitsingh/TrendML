@@ -155,20 +155,30 @@ The linear models trained on the truncated datasets exhibit test set accuracy ar
 
 ### Q-Learning (Reinforcement Learning)
 * Introduction & Explanation of how Q-Learning works?
-* In Reinforcement Learning, we will have an agent that will take in a state of an environment (s), then look up the policy (pi) on what it should do and output an action (a). There will be reward (r) associated with an action that the agent decides to take. If the action changes the environment, then we will have a new state of an environment then the circle repeats again, the agent will look up the policy and output an action. The objective of the agent is to take actions that optimize the reward over time.
-* In the context of trading, actions include buy, sell, and hold. Reward could be return from trade or daily return. States are factors about our assets(stocks/ cryptocurrencies) that we might observe and know about like prices.
-* This is also called Markov decision problem which include:
-*  ** sets of states s
-*  ** set of actions a 
-*  ** transition function T[s,a,s']: a three-dimensional object that records the probability that if we are at state s and take action a we will end up at state s'
-*  ** reward function R[s,a] 
-*  We need to find $\pi$ (s) that will maximize the reward over time.
-*  Most of the time, we don't know the transition or/ and the reward function, so our agent has to interact with the world and observe what happens and learn from it. We call those experience tuples. Once we have these experience tuples, we will use Q-learning, a model-free method, to develop a policy $\pi$ just by directly looking at our data.
-*  In Q-learning, we will have a Q table that represents the value of taking action a in state s.
+In Reinforcement Learning, we will have an agent that will take in a state of an environment (s), then look up the policy ($\Pi$) on what it should do and output an action (a). There will be reward (r) associated with an action that the agent decides to take. If the action changes the environment, then we will have a new state of an environment then the circle repeats again, the agent will look up the policy and output an action. The objective of the agent is to take actions that optimize the reward over time.
+In the context of trading, actions include buy, sell, and hold. Reward could be return from trade or daily return. States are factors about our assets(stocks/ cryptocurrencies) that we might observe and know about like prices.
+This is also called Markov decision problem which include:
+*  sets of states s
+*  set of actions a 
+*  transition function T[s,a,s']: a three-dimensional object that records the probability that if we are at state s and take action a we will end up at state s'
+*  reward function R[s,a] 
+We need to find $\pi$ (s) that will maximize the reward over time.
+Most of the time, we don't know the transition or/ and the reward function, so our agent has to interact with the world and observe what happens and learn from it. We call those experience tuples. Once we have these experience tuples, we will use Q-learning, a model-free method, to develop a policy $\Pi$ just by directly looking at our data.
+
+In Q-learning, we will have a Q table that represents the value of taking action a in state s.
 * ` Q[s,a] = immediate reward + discounted reward`
-*  When we are in a state s and we want to find out which action is the best to take, we need to look at all potential actions and find out which value of Q[s,a] is maximized, so our policy is represented as :
-`$\pi$(s) = argmax_a(Q[s,a])`
-*   
+
+When we are in a state s and we want to find out which action is the best to take, we need to look at all potential actions and find out which value of Q[s,a] is maximized, so our policy is represented as :
+*`$\Pi$(s) = argmax_a(Q[s,a])`
+
+Our optimal policy and optimal Q-table are represented as $\Pi^*$(s) and $Q*[s,a].
+
+Q-learning procedure
+-	Select training data
+-	Iterate over time <s.a.s’.s>
+-	Test policy pi
+-	Repeat until converge
+
 * Results & Discussion
   * TODO
 ______

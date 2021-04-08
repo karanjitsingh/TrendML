@@ -57,8 +57,8 @@ how we generate truth labels and features from raw price data.
   
   ![image](https://user-images.githubusercontent.com/48078197/113923315-6b00f900-97b6-11eb-84e1-636756fec762.png)
   
-  The gini index is a metric used to measure the purity of the node. It is similar to entropy in use and can be used to observe the quality of the split. 
-  GiniIndex=1&nbsp; –&nbsp; \sum_{i=1}^{n} (p^2)_i
+  The gini index is a metric used to measure the purity of the node. It is similar to entropy in use and can be used to observe the quality of the split.  
+  GiniIndex = 1&nbsp; –&nbsp; $\sum_{i=1}^n$ $p^2_i$ 
   
   By printing out the decision tree, we can get a better understanding of how the split and decision is done at each node and how each indicator is being considered. For the       above selection, the tree is represented as -  
     

@@ -1,3 +1,11 @@
 theme: jekyll-theme-cayman
 title: Trend Analysis for Cryptocurrencies and Other Assets
 description: CS 7641 Machine Learning - Team 6
+
+collections:
+  Proposal:
+    output: true
+    permalink: /:collection/:path/
+  Midterm:
+    output: true
+    permalink: /:collection/:path/

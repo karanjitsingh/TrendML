@@ -1,3 +1,11 @@
+---
+title: Trend Analysis for Cryptocurrencies and Other Assets!
+layout: template
+filename: proposal
+--- 
+
+## Project Proposal
+
 <div style="
     position: relative;
     width: 100%;

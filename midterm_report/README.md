@@ -179,7 +179,7 @@ In Q-learning, we will have a Q table that represents the value of taking action
 When we are in a state s and we want to find out which action is the best to take, we need to look at all potential actions and find out which value of Q[s,a] is maximized, so our policy is represented as :
  `Pi(s) = argmax_a(Q[s,a])`
 
-Our optimal policy and optimal Q-table are represented as $\Pi^*$(s) and $Q*[s,a].
+Our optimal policy and optimal Q-table are represented as `Pi*(s) and Q*[s,a]`.
 
 Q-learning procedure
 -	Select training data

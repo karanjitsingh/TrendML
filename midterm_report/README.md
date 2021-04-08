@@ -43,54 +43,57 @@ how we generate truth labels and features from raw price data.
   * TODO
 
 ### Decision Tree (Supervised Learning)
-* Used [`sklearn.tree.DecisionTreeClassifier`](https://scikit-learn.org/stable/modules/generated/sklearn.tree.DecisionTreeClassifier.html)
+* **Used** [`sklearn.tree.DecisionTreeClassifier`](https://scikit-learn.org/stable/modules/generated/sklearn.tree.DecisionTreeClassifier.html)
 
-* Method &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+* **Method**  
   Decision tree is a simple but effective machine learning technique that can be used for classification tasks. In this project, We use it for the purpose of selecting the best   set of features among several available features. In Technical Analysis, different approaches make use of different indicators to observe a pattern and determine the stock       trends. More often than not, a set of 2-3 indicators are used in combination rather than just one for better accuracy. It is a challenge to identify which set performs better,   so we make use of decision trees to identify them for us. We have considered 8 commonly used indicators ( SMA21, SMA50, EMA21, EMA50, RSI, MFI, ADX, ATR ) as features. A set     of 3 among them are selected randomly and provided as features to the decision tree. The classification is done separately for 'BUY' or 'Long' and 'SELL' or 'Short' based on     the truth labels as defined in sec 4.1. The training and test data split is handled by the sklearn library and the resulting accuracy is calculated. This process is repeated     several times considering a different set of indicators again selected randomly from the pool. The indicator set with the highest accuracy is selected as the best or the most   relavant indicators to be used for the asset.
 
-* Results & Discussion &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+* **Results and Discussion**    
    The graph below plots the selected indicator sets on the x axis with the obtained accuracy in the y axis. We can observe that the combination 8-7-2 or (ATR, ADX and SMA50)       provides the best estimate of the trend among the selected indicators as it has the highest accuracy.
   
   ![image](https://user-images.githubusercontent.com/48078197/113922177-f7aab780-97b4-11eb-87ac-7a8839c21f92.png)
   
-  *The below image shows the branch traversal of the decision tree to reach the classification or the leaf nodes. It is important to note that the max depth of the tree has been   selected as 3 to limit overfitting as technical indicators are very prone to overfit the data in stock trend and price prediction. To give us a better evidence and further       control overfitting, another constraint has been placed where each leaf is considered valid only if there are atleast 25 samples in it.
+  The below image shows the branch traversal of the decision tree to reach the classification or the leaf nodes. It is important to note that the max depth of the tree has been   selected as 3 to limit overfitting as technical indicators are very prone to overfit the data in stock trend and price prediction. To give us a better evidence and further       control overfitting, another constraint has been placed where each leaf is considered valid only if there are atleast 25 samples in it.
   
   ![image](https://user-images.githubusercontent.com/48078197/113923315-6b00f900-97b6-11eb-84e1-636756fec762.png)
   
   The gini index is a metric used to measure the purity of the node. It is similar to entropy in use and can be used to observe the quality of the split. 
-  GiniIndex=1–∑_i (p^2)_i
+  GiniIndex=1&nbsp; –&nbsp; \sum_{i=1}^{n} (p^2)_i
   
-  By printing out the decision tree, we can get a better understanding of how the split and decision is done at each node and how each indicator is being considered. For the       above selection, the tree is represented as - 
-  1: 'sma21', 2: 'sma50', 3: 'ema21', 4: 'ema50', 5: 'rsi14', 6: 'mfi10', 7:'adx', 8:'atr'
-
-  |--- 2 <= 10808.51
-  |   |--- 8 <= 1084.19
-  |   |   |--- 2 <= 5198.32
-  |   |   |   |--- class: False
-  |   |   |--- 2 >  5198.32
-  |   |   |   |--- class: False
-  |   |--- 8 >  1084.19
-  |   |   |--- 8 <= 3901.93
-  |   |   |   |--- class: True
-  |   |   |--- 8 >  3901.93
-  |   |   |   |--- class: True
-  |--- 2 >  10808.51
-  |   |--- 8 <= 1208.95
-  |   |   |--- 7 <= 28.66
-  |   |   |   |--- class: True
-  |   |   |--- 7 >  28.66
-  |   |   |   |--- class: True
-  |   |--- 8 >  1208.95
-  |   |   |--- 2 <= 29431.01
-  |   |   |   |--- class: False
-  |   |   |--- 2 >  29431.01
-  |   |   |   |--- class: True
+  By printing out the decision tree, we can get a better understanding of how the split and decision is done at each node and how each indicator is being considered. For the       above selection, the tree is represented as -  
+    
+  1: 'sma21', 2: 'sma50', 3: 'ema21', 4: 'ema50', 5: 'rsi14', 6: 'mfi10', 7:'adx', 8:'atr'  
+    
   
-  classification accuracy for atr, adx, sma50 :0.7161290322580646 
+  |--- 2 <= 10808.51  
+  |&nbsp;&nbsp;   |--- 8 <= 1084.19  
+  |&nbsp;&nbsp;   |&nbsp;&nbsp;   |--- 2 <= 5198.32  
+  |&nbsp;&nbsp;   |&nbsp;&nbsp;   |&nbsp;&nbsp;   |--- class: False  
+  |&nbsp;&nbsp;   |&nbsp;&nbsp;   |--- 2 >  5198.32  
+  |&nbsp;&nbsp;   |&nbsp;&nbsp;   |&nbsp;&nbsp;   |--- class: False  
+  |&nbsp;&nbsp;   |--- 8 >  1084.19  
+  |&nbsp;&nbsp;   |&nbsp;&nbsp;   |--- 8 <= 3901.93  
+  |&nbsp;&nbsp;   |&nbsp;&nbsp;   |&nbsp;&nbsp;   |--- class: True  
+  |&nbsp;&nbsp;   |&nbsp;&nbsp;   |--- 8 >  3901.93  
+  |&nbsp;&nbsp;   |&nbsp;&nbsp;   |&nbsp;&nbsp;   |--- class: True  
+  |--- 2 >  10808.51  
+  |&nbsp;&nbsp;   |--- 8 <= 1208.95  
+  |&nbsp;&nbsp;   |&nbsp;&nbsp;   |--- 7 <= 28.66  
+  |&nbsp;&nbsp;   |&nbsp;&nbsp;   |&nbsp;&nbsp;   |--- class: True  
+  |&nbsp;&nbsp;   |&nbsp;&nbsp;   |--- 7 >  28.66  
+  |&nbsp;&nbsp;   |&nbsp;&nbsp;   |&nbsp;&nbsp;   |--- class: True  
+  |&nbsp;&nbsp;   |--- 8 >  1208.95  
+  |&nbsp;&nbsp;   |&nbsp;   |--- 2 <= 29431.01  
+  |&nbsp;&nbsp;   |&nbsp;&nbsp;   |&nbsp;&nbsp;   |--- class: False  
+  |&nbsp;&nbsp;   |&nbsp;&nbsp;   |--- 2 >  29431.01  
+  |&nbsp;&nbsp;   |&nbsp;&nbsp;   |&nbsp;&nbsp;   |--- class: True  
+  
+  classification accuracy for atr, adx, sma50 :&nbsp;0.7161290322580646 
 
-By changing the tree parameters and constraints such as max depth, minimum nodes and trend thresholds, we can obtain a better picture of the selected indicators and it can be a significant help for traders in identifying the right indicators to use in their trading. The focus here is not on the absolute metric of accuracy but rather the relative measure of accuracy among different indicator sets as shown below: 
-Indicator sets: ['4-8-1', '4-7-5', '3-6-7', '8-7-2', '8-2-3', '7-1-8', '3-5-4', '7-4-8'] 
-Accuracy      : [66.45,    65.80,    63.22,   71.61,  66.77,   59.35,   68.38,  70.96]
+By changing the tree parameters and constraints such as max depth, minimum nodes and trend thresholds, we can obtain a better picture of the selected indicators and it can be a significant help for traders in identifying the right indicators to use in their trading. The focus here is not on the absolute metric of accuracy but rather the relative measure of accuracy among different indicator sets as shown below:   
+**Indicator sets**: ['4-8-1', '4-7-5', '3-6-7', '8-7-2', '8-2-3', '7-1-8', '3-5-4', '7-4-8']   
+**Accuracy**      : [66.45,    65.80,    63.22,   71.61,  66.77,   59.35,   68.38,  70.96]  
+<br>
 
 ### Linear Models (Supervised Learning)
 Before diving into more sophisticated models, we ran initial experiments with linear models which tend to have relatively simple decision boundaries. The motivation for trying out the linear models was to see how much classification accuracy the simple linear models can achieve on our data. We chose to try ridge regression & logistic regression models for our classification task.

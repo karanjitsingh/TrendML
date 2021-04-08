@@ -197,8 +197,8 @@ Most of the time, we don't know the transition or/ and the reward function, so o
 
 
 In Q-learning, we want to optimize discounted reward: 
-` 	∑_(i=0)^∞ γ^(i-1) r_i  (O ≤ γ ≤1.0)
-`
+
+![formula](https://render.githubusercontent.com/render/math?math=%5Csum_%7Bi%3D0%7D%5E%7B%5Cinfty%7D%20%5Cgamma%5E%7Bi-1%7Dr_i%5Chspace%7B30pt%7Ds.t.%5Chspace%7B5pt%7D0%20%5Cleq%20%5Cgamma%5Cleq1)
 
 Gamma (γ) is strongly related to interest rate. For example, if gamma = 0.95, it means each step in the future is worth 5% less than the immediate reward if we got it right away.
 
@@ -278,7 +278,3 @@ ______
 [Mallqui, D. C., & Fernandes, R. A. (2019). Predicting the DIRECTION, maximum, minimum and closing prices of daily Bitcoin exchange rate using machine learning techniques. Applied Soft Computing, 75, 596-606. doi:10.1016/j.asoc.2018.11.038](https://www.sciencedirect.com/science/article/pii/S1568494618306707)
 
 [Liew, J., Li, R., Budavári, T., & Sharma, A. (2019). Cryptocurrency investing examined. The Journal of the British Blockchain Association, 2(2), 1-12. doi:10.31585/jbba-2-2-(2)2019](https://www.researchgate.net/publication/337011389_Cryptocurrency_Investing_Examined)
-
-Udacity. (n.d.). Machine Learning for Trading. Lecture. Retrieved April 8, 2021, from https://classroom.udacity.com/courses/ud501
-
-

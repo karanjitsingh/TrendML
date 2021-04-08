@@ -11,7 +11,7 @@
 Secondly, no studies have employed technical indicators commonly used by stock traders in their cryptocurrency price prediction model. As Mallqui & Fernades (2019) pointed out, the technical indicators such as Relative Strength Index (RSI), Moving Average Convergence/Divergence (MACD), etc. could be used in addition to economic indicators to better predict Bitcoin price direction. Therefore, we would like to propose a model that incorporates the indicators and predicts trend to help traders decide when to sell, hold, or buy cryptocurrencies at a given moment. 
 
 ### Data Collection
-Our data will be obtained from Binance using its API. We are planning to work on 5 most popular coins and our data dates to 2018.
+Our data is obtained from Binance using its API. We are planning to work on 5 most popular coins and our data dates to 2018.
 
 ### Data Preprocessing
 In this project, we plan to train two classifiers, one for the `BUY` action and the other for the `SELL` action.
@@ -38,13 +38,11 @@ how we generate truth labels and features from raw price data.
 * Follow-up Questions:
   * Do we need to normalize the price/features before feeding it to our ML models?
 
-### Methods:
-
-#### ARIMA & GARCH (Statistical Time Series Analysis)
+### ARIMA & GARCH (Statistical Time Series Analysis)
 * Results & Discussion
   * TODO
 
-#### Decision Tree (Supervised Learning)
+### Decision Tree (Supervised Learning)
 * Used [`sklearn.tree.DecisionTreeClassifier`](https://scikit-learn.org/stable/modules/generated/sklearn.tree.DecisionTreeClassifier.html)
 
 * Method &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
@@ -94,24 +92,68 @@ By changing the tree parameters and constraints such as max depth, minimum nodes
 Indicator sets: ['4-8-1', '4-7-5', '3-6-7', '8-7-2', '8-2-3', '7-1-8', '3-5-4', '7-4-8'] 
 Accuracy      : [66.45,    65.80,    63.22,   71.61,  66.77,   59.35,   68.38,  70.96]
 
-#### Linear Models (Supervised Learning)
-* Ridge Regression
-  * Used [`sklearn.linear_model.RidgeClassifier`](https://scikit-learn.org/stable/modules/generated/sklearn.linear_model.RidgeClassifier.html#sklearn-linear-model-ridgeclassifier)
-    * Converts the target `y` into {-1, 1} and then treats the problem as a regression task.
+### Linear Models (Supervised Learning)
+Before diving into more sophisticated models, we ran initial experiments with linear models which tend to have relatively simple decision boundaries. The motivation for trying out the linear models was to see how much classification accuracy the simple linear models can achieve on our data. We chose to try ridge regression & logistic regression models for our classification task.
 
-  * Results & Discussion
-    * TODO
+* RidgeClassifier (using Ridge Regression)
+  * Used [`sklearn.linear_model.RidgeClassifier`](https://scikit-learn.org/stable/modules/generated/sklearn.linear_model.RidgeClassifier.html#sklearn-linear-model-ridgeclassifier), which converts the target `y` labels into {-1, 1} and then treats the classification problem as a regression task.
 
 * Logistic Regression
   * Used [`sklearn.linear_model.LogisticRegression`](https://scikit-learn.org/stable/modules/generated/sklearn.linear_model.LogisticRegression.html?highlight=logisticregression#sklearn.linear_model.LogisticRegression)
-  * Results & Discussion
-    * TODO
 
-#### Support Vector Machine (Supervised Learning)
-* Results & Discussion
-  * TODO
+Currently, we have only trained classifiers that return the `BUY` trend signal. We have also only used 3 technical indicators (EMA-30, MFI-10, RSI-30) as features for training.
 
-#### Q-Learning (Reinforcement Learning)
+We initially trained the models on two datasets derived from different timeframe units of `BTCUSDT` price data. 
+* X, y derived from **1hour-scale price data**
+  * Ratio of True/False `y` labels: 24655 / 6013
+* X, y derived from **1day-scale price data**
+  * Ratio of True/False `y` labels: 1039 / 239
+
+Note that the True/False ratio of `y` in the datasets are unbalanced, and the number of `True` labels is more than 4 times the number of `False` labels. Below, we report our results from training the two on the original unbalanced datasets.
+
+| Model (trained on 1hour-scale data)     | training set accuracy | test set accuracy |
+| -----------| --------------------- | ----------------- |
+| Ridge Classifier| 0.8057647929638176| 0.8053814002089864|
+| Logistic Regression | 0.8042844080637437 | 0.8035527690700105 |
+
+| Model (trained on 1day-scale data)     | training set accuracy | test set accuracy |
+| -----------| --------------------- | ----------------- |
+| Ridge Classifier| 0.8062770562770563| 0.8284789644012945|
+| Logistic Regression | 0.8062770562770563 | 0.8252427184466019 |
+
+<br>
+
+The surprisingly high accuracy of 80% was achievable due to the unbalanced dataset that we were using. Below is a plot showing the distribution of true labels and the label predictions from our Ridge Regresesion model on 1-day scale data. **It is notable that our model always returned `True` for the classification task, and yet its accuracy exceeded 80% thanks to fact that 80% of the dataset had the label `y = True`.**
+
+ ![image](./assets/ridge_skewed_1d.png)
+
+In order to address the **unbalanced dataset problem**, we truncated the original dataset by randomly removing some of the data points with `y = True`. This truncating process balanced the distribution of `y` . Below are descriptions on the truncated datasets.
+
+* X, y derived from **1hour-scale price data** (truncated)
+  * Ratio of True/False `y` labels: 6002 / 6002
+* X, y derived from **1day-scale price data** (truncated)
+  * Ratio of True/False `y` labels: 233 / 233
+
+We trained the two linear models on the truncated datasets, and the results
+were as below.
+
+| Model (trained on truncated 1hour-scale data)     | training set accuracy | test set accuracy |
+| -----------| --------------------- | ----------------- |
+| Ridge Classifier| 0.657336443407753| 0.6491169610129957|
+| Logistic Regression | 0.6578918138398312 | 0.647450849716761 |
+
+| Model (trained on truncated 1day-scale data)     | training set accuracy | test set accuracy |
+| -----------| --------------------- | ----------------- |
+| Ridge Classifier| 0.7392550143266475| 0.6752136752136753|
+| Logistic Regression | 0.7020057306590258 | 0.6495726495726496 |
+
+<br>
+
+The linear models trained on the truncated datasets exhibit test set accuracy around 65%. Considering the given dataset has 50/50 ratio of True/False for the `y` label, we can say that the linear models succeeded in finding a decision boundary that has better classification accuracy than a coin-toss.
+
+<br>
+
+### Q-Learning (Reinforcement Learning)
 * Introduction & Explanation of how Q-Learning works?
 * Results & Discussion
   * TODO

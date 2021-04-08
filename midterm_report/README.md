@@ -167,7 +167,8 @@ Most of the time, we don't know the transition or/ and the reward function, so o
 
 
 In Q-learning, we want to optimize discounted reward: 
-` $ \sigma {i=0}{infinity} \gamma ^ i-1$  r _i (0 <= gamma <= 1.0).`
+` 	∑_(i=0)^∞▒〖γ^(i-1) r_i  (O ≤ γ〗≤1.0)![image](https://user-images.githubusercontent.com/50081744/114080185-16728200-9879-11eb-8215-5d56dcffcd8c.png)
+`
 -	Gamma is strongly related to interest rate. For example, if gamma = 0.95, it means each step in the future is worth 5% less than the immediate reward if we got it right away.
 
 
@@ -175,7 +176,8 @@ In Q-learning, we will have a Q table that represents the value of taking action
 * ` Q[s,a] = immediate reward + discounted reward`
 
 When we are in a state s and we want to find out which action is the best to take, we need to look at all potential actions and find out which value of Q[s,a] is maximized, so our policy is represented as :
-*`\Pi (s) = argmax_a(Q[s,a])`
+*`![image](https://user-images.githubusercontent.com/50081744/114080264-33a75080-9879-11eb-8b12-20624c14d976.png)
+ (s) = argmax_a(Q[s,a])`
 
 Our optimal policy and optimal Q-table are represented as $\Pi^*$(s) and $Q*[s,a].
 

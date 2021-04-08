@@ -154,7 +154,7 @@ The linear models trained on the truncated datasets exhibit test set accuracy ar
 <br>
 
 ### Q-Learning (Reinforcement Learning)
-* Introduction & Explanation of how Q-Learning works?
+#### Introduction & Explanation of how Q-Learning works?
 In Reinforcement Learning, we will have an agent that will take in a state of an environment (s), then look up the policy ($\Pi$) on what it should do and output an action (a). There will be reward (r) associated with an action that the agent decides to take. If the action changes the environment, then we will have a new state of an environment then the circle repeats again, the agent will look up the policy and output an action. The objective of the agent is to take actions that optimize the reward over time.
 In the context of trading, actions include buy, sell, and hold. Reward could be return from trade or daily return. States are factors about our assets(stocks/ cryptocurrencies) that we might observe and know about like prices.
 This is also called Markov decision problem which include:
@@ -162,24 +162,62 @@ This is also called Markov decision problem which include:
 *  set of actions a 
 *  transition function T[s,a,s']: a three-dimensional object that records the probability that if we are at state s and take action a we will end up at state s'
 *  reward function R[s,a] 
-We need to find $\pi$ (s) that will maximize the reward over time.
-Most of the time, we don't know the transition or/ and the reward function, so our agent has to interact with the world and observe what happens and learn from it. We call those experience tuples. Once we have these experience tuples, we will use Q-learning, a model-free method, to develop a policy $\Pi$ just by directly looking at our data.
+We need to find $\Pi$ (s) that will maximize the reward over time.
+Most of the time, we don't know the transition or/ and the reward function, so our agent has to interact with the world and observe what happens and learn from it. We call those experience tuples. Once we have these experience tuples, we will use Q-learning, a model-free method, to develop a policy $ \Pi $ just by directly looking at our data.
+
+
+In Q-learning, we want to optimize discounted reward: 
+` $ \sigma {i=0}{infinity} \gamma ^ i-1$  r _i (0 <= gamma <= 1.0).`
+-	Gamma is strongly related to interest rate. For example, if gamma = 0.95, it means each step in the future is worth 5% less than the immediate reward if we got it right away.
+
 
 In Q-learning, we will have a Q table that represents the value of taking action a in state s.
 * ` Q[s,a] = immediate reward + discounted reward`
 
 When we are in a state s and we want to find out which action is the best to take, we need to look at all potential actions and find out which value of Q[s,a] is maximized, so our policy is represented as :
-*`$\Pi$(s) = argmax_a(Q[s,a])`
+*`$ \Pi $(s) = argmax_a(Q[s,a])`
 
 Our optimal policy and optimal Q-table are represented as $\Pi^*$(s) and $Q*[s,a].
 
 Q-learning procedure
 -	Select training data
--	Iterate over time <s.a.s’.s>
+-	Iterate over time <s,a,s’,s>
 -	Test policy pi
 -	Repeat until converge
+Details of Iterate over time <s,a,s’,s>:
+-	Set start time, init Q[] (small, random number)
+-	Compute s (prices of our cryptocurrencies)
+-	Consult Q to find the best option a
+-	Select a
+-	Observe r, s’
+-	Update Q
 
-* Results & Discussion
+
+Update Rule: 
+The formula for computing Q for any state-action pair <s, a>, given an experience tuple <s, a, s', r>, is:
+`Q'[s, a] = (1 - α) · Q[s, a] + α · (r + γ · Q[s', argmaxa'(Q[s', a'])])`
+Here:
+-	r = R[s, a] is the immediate reward for taking action a in state s,
+-	γ ∈ [0, 1] (gamma) is the discount factor used to progressively reduce the value of future rewards,
+-	s' is the resulting next state,
+-	argmaxa'(Q[s', a']) is the action that maximizes the Q-value among all possible actions a' from s', and,
+-	α ∈ [0, 1] (alpha) is the learning rate used to vary the weight given to new experiences compared with past Q-values.
+
+Recap:
+-	Building a model:
+o	Define states, actions, rewards
+o	Choose in-sample training period
+o	Iterate: Q-table update
+o	Backtest
+-	Testing a model:
+o	Backtest on later data
+
+- Advantages: Q-learning can easily be applied to domains where all states and/or transitions are not fully defined
+
+- Challenges: reward (e.g. for buying a stock) often comes in the future - representing that properly requires look-ahead and careful weighting, taking random actions (such as trades) just to learn a good strategy is not really feasible because it will cost us lots of money.
+
+
+#### Results & Discussion
   * TODO
 ______
 

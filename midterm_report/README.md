@@ -155,7 +155,7 @@ The linear models trained on the truncated datasets exhibit test set accuracy ar
 
 ### Q-Learning (Reinforcement Learning)
 #### Introduction & Explanation of how Q-Learning works?
-In Reinforcement Learning, we will have an agent that will take in a state of an environment (s), then look up the policy ($\Pi$) on what it should do and output an action (a). There will be reward (r) associated with an action that the agent decides to take. If the action changes the environment, then we will have a new state of an environment then the circle repeats again, the agent will look up the policy and output an action. The objective of the agent is to take actions that optimize the reward over time.
+In Reinforcement Learning, we will have an agent that will take in a state of an environment (s), then look up the policy (Pi) on what it should do and output an action (a). There will be reward (r) associated with an action that the agent decides to take. If the action changes the environment, then we will have a new state of an environment then the circle repeats again, the agent will look up the policy and output an action. The objective of the agent is to take actions that optimize the reward over time.
 In the context of trading, actions include buy, sell, and hold. Reward could be return from trade or daily return. States are factors about our assets(stocks/ cryptocurrencies) that we might observe and know about like prices.
 This is also called Markov decision problem which include:
 *  sets of states s
@@ -167,17 +167,16 @@ Most of the time, we don't know the transition or/ and the reward function, so o
 
 
 In Q-learning, we want to optimize discounted reward: 
-` 	∑_(i=0)^∞▒〖γ^(i-1) r_i  (O ≤ γ〗≤1.0)![image](https://user-images.githubusercontent.com/50081744/114080185-16728200-9879-11eb-8215-5d56dcffcd8c.png)
+` 	∑_(i=0)^∞ γ^(i-1) r_i  (O ≤ γ ≤1.0)
 `
--	Gamma is strongly related to interest rate. For example, if gamma = 0.95, it means each step in the future is worth 5% less than the immediate reward if we got it right away.
+-	Gamma (γ) is strongly related to interest rate. For example, if gamma = 0.95, it means each step in the future is worth 5% less than the immediate reward if we got it right away.
 
 
 In Q-learning, we will have a Q table that represents the value of taking action a in state s.
 * ` Q[s,a] = immediate reward + discounted reward`
 
 When we are in a state s and we want to find out which action is the best to take, we need to look at all potential actions and find out which value of Q[s,a] is maximized, so our policy is represented as :
-*`![image](https://user-images.githubusercontent.com/50081744/114080264-33a75080-9879-11eb-8b12-20624c14d976.png)
- (s) = argmax_a(Q[s,a])`
+ `Pi(s) = argmax_a(Q[s,a])`
 
 Our optimal policy and optimal Q-table are represented as $\Pi^*$(s) and $Q*[s,a].
 
@@ -216,7 +215,7 @@ o	Backtest on later data
 
 - Advantages: Q-learning can easily be applied to domains where all states and/or transitions are not fully defined
 
-- Challenges: reward (e.g. for buying a stock) often comes in the future - representing that properly requires look-ahead and careful weighting, taking random actions (such as trades) just to learn a good strategy is not really feasible because it will cost us lots of money.
+- Challenges: reward (e.g. for buying a stock) often comes in the future - representing that properly requires look-ahead and careful weighting, taking random actions (such as trades) just to learn a good strategy is not really feasible because it will cost us lots of money (Reference: Udacity).
 
 
 #### Results & Discussion
@@ -241,5 +240,7 @@ ______
 [Mallqui, D. C., & Fernandes, R. A. (2019). Predicting the DIRECTION, maximum, minimum and closing prices of daily Bitcoin exchange rate using machine learning techniques. Applied Soft Computing, 75, 596-606. doi:10.1016/j.asoc.2018.11.038](https://www.sciencedirect.com/science/article/pii/S1568494618306707)
 
 [Liew, J., Li, R., Budavári, T., & Sharma, A. (2019). Cryptocurrency investing examined. The Journal of the British Blockchain Association, 2(2), 1-12. doi:10.31585/jbba-2-2-(2)2019](https://www.researchgate.net/publication/337011389_Cryptocurrency_Investing_Examined)
+
+Udacity. (n.d.). Machine Learning for Trading. Lecture. Retrieved April 8, 2021, from https://classroom.udacity.com/courses/ud501
 
 

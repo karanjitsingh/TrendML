@@ -1,0 +1,1 @@
+### Use this directory to store any image or resources that you want to include in the `midterm report`.

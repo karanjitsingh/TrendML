@@ -156,6 +156,31 @@ The linear models trained on the truncated datasets exhibit test set accuracy ar
 
 <br>
 
+### Support Vector Model (Supervise Learning) 
+After exploring the linear regression models, we tried another supervised machine learning model - support vector machine (SVM). We used SVM's non-linear radial kernal for classification. We used the cleaned balanced data (50/50). We checked the accuracy of the SVM model on various C Parameter. C Parameter tells the SVM optimization how much mis-classification you want to avoid on each training example. For large values of C, the optimization chooses a smaller-margin hyperplane if that hyperplane does a better job of getting all the training points classified correctly. As large values of C could lead to overfitting and small values lead to lower accuracy, We picked C =10^3 as an optimum value.
+
+Table 1: SVM Radial Model Trained on truncated 1hour-scale data
+| Model # | C Value |  Train Accuracy | Test Accuracy |
+|---------|---------|-----------------|---------------|
+| 1       | 1e-5    | 0.5027          | 0.491         |
+| 2       | 1e-3    | 0.5014          | 0.4955        |
+| 3       | 1e2     | 0.6413          | 0.6387        |
+| 4       | 1e3     | 0.6514          | 0.6391        |
+| 5       | 1e5     | 0.6598          | 0.6317        |
+
+Table 2: SVM Radial Model Trained on truncated 1d-scale data
+| Model # | C Value |  Train Accuracy | Test Accuracy |
+|---------|---------|-----------------|---------------|
+| 1       | 1e-5    | 0.5014          | 0.4957        |
+| 2       | 1e-3    | 0.5100          | 0.4700        |
+| 3       | 1e2     | 0.5441          | 0.4700        |
+| 4       | 1e3     | 0.6475          | 0.6239        |
+| 5       | 1e5     | 0.6762          | 0.6837        |
+
+The SVM model trained on the truncated datasets provide the test set accuracy of around 63% on C=1e3 . The model results look promising and we will continue to explore more how we can improve the accuracy. 
+
+<br>
+
 ### Q-Learning (Reinforcement Learning)
 #### Introduction & Explanation of how Q-Learning works?
 In Reinforcement Learning, we will have an agent that will take in a state of an environment (s), then look up the policy (Pi) on what it should do and output an action (a). There will be reward (r) associated with an action that the agent decides to take. If the action changes the environment, then we will have a new state of an environment then the circle repeats again, the agent will look up the policy and output an action. The objective of the agent is to take actions that optimize the reward over time.

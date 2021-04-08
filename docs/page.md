@@ -1,1 +1,4 @@
-some page
+---
+title: somepage
+filename: page
+--- 

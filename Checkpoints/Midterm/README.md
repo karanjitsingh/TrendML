@@ -1,8 +1,3 @@
----
-title: Trend Analysis for Cryptocurrencies and Other Assets
-layout: template
-filename: index
---- 
 ## Project Midterm Report 
 
 ### Introduction/Background: 
@@ -265,12 +260,12 @@ Challenges: reward (e.g. for buying a stock) often comes in the future - represe
   * TODO
 ______
 
-#### Contributors
-* Himanshu Gupta
-* Karan Singh
-* Tien Le
-* Vikas Rao
-* Youngsuk Kim
+#### Contributions
+* Himanshu Gupta : 
+* Karan Singh : 
+* Tien Le : 
+* Vikas Rao : 
+* Youngsuk Kim : 
 
 #### References 
 

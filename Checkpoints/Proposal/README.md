@@ -1,4 +1,4 @@
-# Trend Analysis for Cryptocurrencies and other Assets. (Team 6) 
+## Project Proposal
 
 ### Introduction/Background: 
 

@@ -2,6 +2,18 @@
 #Define coins
 from tensortrade.oms.instruments import Instrument
 
+from tensorflow.python.client import device_lib
+def get_available_gpus():
+    local_device_protos = device_lib.list_local_devices()
+    return [x.name for x in local_device_protos if x.device_type == 'GPU']
+def get_available_cpus():
+    local_device_protos = device_lib.list_local_devices()
+    return [x.name for x in local_device_protos if x.device_type == 'CPU']
+num_gpus = len(get_available_gpus())
+num_cpus = len(get_available_cpus())
+
+# print("CPU: " + str(num_cpus) + " GPU: " + str(num_gpus))
+
 USD = Instrument("USD", 2, "U.S. Dollar")
 UTC = Instrument("UTC", 8, "Untitled Coin")
 
@@ -178,6 +190,44 @@ from tensortrade.oms.services.execution.simulated import execute_order
 from tensortrade.oms.wallets import Wallet, Portfolio
 
 
+# Data Feed
+
+def getDataFeed():
+
+    def rsi(price: Stream[float], period: float) -> Stream[float]:
+        r = price.diff()
+        upside = r.clamp_min(0).abs()
+        downside = r.clamp_max(0).abs()
+        rs = upside.ewm(alpha=1 / period).mean() / downside.ewm(alpha=1 / period).mean()
+        return 100*(1 - (1 + rs) ** -1)
+
+
+    def macd(price: Stream[float], fast: float, slow: float, signal: float) -> Stream[float]:
+        fm = price.ewm(span=fast, adjust=False).mean()
+        sm = price.ewm(span=slow, adjust=False).mean()
+        md = fm - sm
+        signal = md - md.ewm(span=signal, adjust=False).mean()
+        return signal
+
+
+    features = []
+    for c in data.columns[1:]:
+        s = Stream.source(list(data[c]), dtype="float").rename(data[c].name)
+        features += [s]
+
+    cp = Stream.select(features, lambda s: s.name == "close")
+
+    features = [
+        cp.log().diff().rename("lr"),
+        rsi(cp, period=20).rename("rsi"),
+        macd(cp, fast=10, slow=50, signal=5).rename("macd")
+    ]
+
+    feed = DataFeed(features)
+    feed.compile()
+
+    return feed
+
 
 def create_env(config):
     x = np.arange(0, 2*np.pi, 2*np.pi / 1001)
@@ -203,7 +253,7 @@ def create_env(config):
         p.rolling(window=10).mean().rename("fast"),
         p.rolling(window=50).mean().rename("medium"),
         p.rolling(window=100).mean().rename("slow"),
-        p.log().diff().fillna(0).rename("lr")
+        p.log().diff().fillna(0).rename("lr"),
     ])
 
     reward_scheme = PBR(price=p)
@@ -250,7 +300,7 @@ analysis = tune.run(
         "framework": "torch",
         "ignore_worker_failures": True,
         "num_workers": 1,
-        "num_gpus": 0,
+        "num_gpus": num_gpus,
         "clip_rewards": True,
         "lr": 8e-6,
         "lr_schedule": [
@@ -296,7 +346,7 @@ agent = ppo.PPOTrainer(
         "log_level": "DEBUG",
         "ignore_worker_failures": True,
         "num_workers": 1,
-        "num_gpus": 0,
+        "num_gpus": num_gpus,
         "clip_rewards": True,
         "lr": 8e-6,
         "lr_schedule": [
@@ -430,7 +480,7 @@ def create_eval_env(config):
         p
     )
 
-    cash = Wallet(bitfinex, 100000 * USD)
+    cash = Wallet(bitfinex, 10000 * USD)
     asset = Wallet(bitfinex, 0 * UTC)
 
     portfolio = Portfolio(USD, [
@@ -485,5 +535,4 @@ obs = env.reset()
 while not done:
     action = agent.compute_action(obs)
     obs, reward, done, info = env.step(action)
-    print(reward)
     episode_reward += reward

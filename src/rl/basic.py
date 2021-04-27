@@ -1,4 +1,10 @@
 import tensorflow as tf
+from tensorflow.python.client import device_lib
+def get_available_gpus():
+    local_device_protos = device_lib.list_local_devices()
+    return [x.name for x in local_device_protos if x.device_type == 'GPU']
+
+num_gpus = len(get_available_gpus())
 
 my_devices = tf.config.experimental.list_physical_devices(device_type='CPU')
 tf.config.experimental.set_visible_devices(devices= my_devices, device_type='CPU')

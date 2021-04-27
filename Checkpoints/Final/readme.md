@@ -157,30 +157,29 @@ The linear models trained on the truncated datasets exhibit test set accuracy ar
 <br>
 
 ### Support Vector Model 
-After exploring the linear regression models, we tried another supervised machine learning model - support vector machine (SVM). We used SVM's non-linear radial kernal for classification. We used the cleaned balanced data (50/50). We checked the accuracy of the SVM model on various C Parameter. C Parameter tells the SVM optimization how much mis-classification you want to avoid on each training example. For large values of C, the optimization chooses a smaller-margin hyperplane if that hyperplane does a better job of getting all the training points classified correctly. As large values of C could lead to overfitting and small values lead to lower accuracy, We picked C =10^3 as an optimum value.
+After exploring the linear regression models, we tried another supervised machine learning model - support vector machine (SVM). We used SVM's linear and non-linear radial kernal for classification. We used the cleaned balanced data (50/50). We checked the accuracy of the SVM model on various C Parameter with gamma value set to auto. C Parameter tells the SVM optimization how much mis-classification you want to avoid on each training example. For large values of C, the optimization chooses a smaller-margin hyperplane if that hyperplane does a better job of getting all the training points classified correctly. As large values of C could lead to overfitting and small values lead to lower accuracy, We picked C =1 as an optimum value.
 
-Table 1: SVM Radial Model Trained on truncated 1hour-scale data
 
-| Model # | C Value |  Train Accuracy | Test Accuracy |
+Table 1: SVM Radial(R) and Linear(L) Model Trained on truncated 1d-scale data
+
+| Model   | C Value |  Train Accuracy | Test Accuracy |
 |---------|---------|-----------------|---------------|
-| 1       | 1e-5    | 0.5027          | 0.491         |
-| 2       | 1e-3    | 0.5014          | 0.4955        |
-| 3       | 1e2     | 0.6413          | 0.6387        |
-| 4       | 1e3     | 0.6514          | 0.6391        |
-| 5       | 1e5     | 0.6598          | 0.6317        |
+| L       | 1e-3    | 0.5143          | 0.5139        |
+| R       | 1e-3    | 0.5043          | 0.5043        |
+| L       | 1e-2    | 0.6741          | 0.6676        |
+| R       | 1e-2    | 0.5043          | 0.5043        |
+| L       | 1e-1    | 0.7006          | 0.6762        |
+| R       | 1e-1    | 0.6991          | 0.6733        |
+| L       | 1       | 0.7020          | 0.6733        |
+| R       | 1       | 0.7077          | 0.6762        |
+| L       | 1e1     | 0.7027          | 0.6733        |
+| R       | 1e1     | 0.7221          | 0.6705        |
+| L       | 1e2     | 0.7027          | 0.6733        |
+| R       | 1e2     | 0.7407          | 0.6360        |
+| L       | 1e3     | 0.7027          | 0.6733        |
+| R       | 1e3     | 0.7679          | 0.6102        |
 
-Table 2: SVM Radial Model Trained on truncated 1d-scale data
-
-| Model # | C Value |  Train Accuracy | Test Accuracy |
-|---------|---------|-----------------|---------------|
-| 1       | 1e-5    | 0.5014          | 0.4957        |
-| 2       | 1e-3    | 0.5100          | 0.4700        |
-| 3       | 1e2     | 0.5441          | 0.4700        |
-| 4       | 1e3     | 0.6475          | 0.6239        |
-| 5       | 1e5     | 0.6762          | 0.6837        |
-
-The SVM model trained on the truncated datasets provide the test set accuracy of around 63% on C=1e3 . The model results look promising and we will continue to explore more on how we can improve the accuracy. 
-
+The SVM model trained on the truncated datasets provide the best score of around 68% on test dataset with C=1 and a radial kernel. 
 <br>
 
 ### Q-Learning (Reinforcement Learning)

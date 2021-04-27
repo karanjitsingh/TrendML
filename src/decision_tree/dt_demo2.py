@@ -5,7 +5,7 @@ from sklearn import tree
 from sklearn.metrics import accuracy_score
 from sklearn.model_selection import train_test_split
 import matplotlib.pyplot as plt
-
+import os
 
 
 
@@ -34,6 +34,8 @@ def gen_X_y(csv_path: str, timeperiod: int, indicator_list:list, long:bool):
     ema1 = talib.EMA(data['close'].values, 21)[timeperiod:]
     ema2 = talib.EMA(data['close'].values, 50)[timeperiod:]
 
+
+
     ## Relative Strength Index: https://www.investopedia.com/terms/r/rsi.asp
     #rsi = talib.RSI(data['close'].values, timeperiod)[timeperiod:]
     rsi = talib.RSI(data['close'].values, 14)[timeperiod:]
@@ -45,7 +47,14 @@ def gen_X_y(csv_path: str, timeperiod: int, indicator_list:list, long:bool):
     #mfi = talib.MFI(data['high'].values, data['low'].values, data['close'].values, data['Volume'].values, timeperiod)[timeperiod:]
     mfi = talib.MFI(data['high'].values, data['low'].values, data['close'].values, data['Volume'].values, 10)[timeperiod:]
 
-    indicator_sets = {1: sma1, 2: sma2, 3: ema1, 4: ema2, 5: rsi, 6: mfi}
+    ## ADX: https://www.investopedia.com/terms/a/adx.asp
+    adx = talib.ADX(data['high'].values, data['low'].values, data['close'].values, 14)[timeperiod:]
+
+    ## ATR: https://www.investopedia.com/terms/a/atr.asp
+    atr = talib.ATR(data['high'].values, data['low'].values, data['close'].values, 14)[timeperiod:]
+
+
+    indicator_sets = {1: sma1, 2: sma2, 3: ema1, 4: ema2, 5: rsi, 6: mfi, 7:adx, 8:atr}
 
     # Merge multiple feature `Series` into a single Pandas `DataFrame`.
     #X = pd.concat([pd.Series(ema),  pd.Series(rsi), pd.Series(mfi)], axis=1)
@@ -80,7 +89,7 @@ def gen_X_y(csv_path: str, timeperiod: int, indicator_list:list, long:bool):
         yn4 = yn4[(timeperiod - 1):]
         yn5 = yn5[(timeperiod - 1):]
 
-        print('prices',y,'\n',yn1,'\n',yn2,'\n',yn3,'\n',yn4,'\n',yn5)
+        print('prices',y,'\n',yn1,'\n',yn2,'\n',yn3,'\n',yn4,'\n',yn5,'\n')
         for i in range(len(yn3)):
             y2[i] = yn1[i] or yn2[i] or yn3[i] or yn4[i] or yn5[i]
 
@@ -124,12 +133,15 @@ if __name__ == '__main__':
 
     y_acc = []
     x_ind = []
+    f = open('Tree_map.txt', 'w')
 
-    for i in range(6):
+    for i in range(8):
         # './rev_Binance_BTCUSDT_d.csv': 1300 days worth data (time unit = day)
-        indicator_sets_ref = {1: 'sma21', 2: 'sma50', 3: 'ema21', 4: 'ema50', 5: 'rsi14', 6: 'mfi10'}
+        indicator_sets_ref = {1: 'sma21', 2: 'sma50', 3: 'ema21', 4: 'ema50', 5: 'rsi14', 6: 'mfi10', 7:'adx', 8:'atr'}
         # Select 3 indices from the above list of indicators for running the algorithm
 
+        f.writelines("1: 'sma21', 2: 'sma50', 3: 'ema21', 4: 'ema50', 5: 'rsi14', 6: 'mfi10', 7:'adx', 8:'atr'")
+        f.writelines('\n')
         #indicator_list = [1,2,3]
         keys = list(indicator_sets_ref.keys())
         #print('dd',list(np.random.choice(keys,3,replace=True)))
@@ -137,12 +149,12 @@ if __name__ == '__main__':
         X, y = gen_X_y(csv_path='./csvs/rev_Binance_BTCUSDT_d.csv', timeperiod=60, indicator_list=indicator_list, long=True)
         accuracy = 0
         # Split train/test sets
-        iters = 5
+        iters = 1
         for c in range(iters):
             X_train, X_test, y_train, y_test = train_test_split(X, y)
             print('train,test',X_train.shape, X_test.shape, y_train.shape, y_test.shape)
 
-            dt_clf = tree.DecisionTreeClassifier(max_depth=3).fit(X_train, y_train)
+            dt_clf = tree.DecisionTreeClassifier(max_depth=3, min_samples_leaf=25).fit(X_train, y_train)
 
             # Predict class labels
             y_test_pred = dt_clf.predict(X_test)
@@ -152,10 +164,14 @@ if __name__ == '__main__':
 
             plt.figure(0)
             tree.plot_tree(dt_clf)
-            #plt.show()
+            plt.show()
 
             from sklearn.tree import export_text
             r = export_text(dt_clf, feature_names=indicator_list)
+
+            f.writelines(r)
+            f.writelines('\n')
+
             print('r',r)
 
             accuracy = accuracy + accuracy_score(y_test, y_test_pred)
@@ -164,16 +180,28 @@ if __name__ == '__main__':
         y_acc.append(accuracy_mean*100)
         x_ind.append(str(indicator_list[0])+'-'+str(indicator_list[1])+'-'+str(indicator_list[2]))
 
+        acc_str = 'classification accuracy for {0}, {1}, {2} :{3} '.format(indicator_sets_ref[indicator_list[0]],
+                                                             indicator_sets_ref[indicator_list[1]],
+                                                             indicator_sets_ref[indicator_list[2]],
+                                                             accuracy_mean)
+        f.writelines(acc_str)
+        f.writelines('\n')
+
         print('classification accuracy for {0}, {1}, {2} :{3} '.format(indicator_sets_ref[indicator_list[0]],
                                                              indicator_sets_ref[indicator_list[1]],
                                                              indicator_sets_ref[indicator_list[2]],
                                                              accuracy_mean))
 
     print('x and y',x_ind,y_acc)
+    f.writelines('Indicator sets:',x_ind)
+    f.writelines('\n')
+    f.writelines('Accuracy :', y_acc)
+    f.writelines('\n')
     #plt.xlim(0,10)
     plt.ylim(40,100)
     plt.xlabel('Indicator set')
     plt.ylabel('mean accuracy')
-    plt.plot(x_ind,y_acc,label="1: sma21, 2: sma50, 3: ema21, 4: ema50, 5: rsi14, 6: mfi10")
+    plt.plot(x_ind,y_acc,label="1:sma21, 2:sma50, 3:ema21, 4:ema50, \n 5: rsi14, 6: mfi10, 7:adx14, 8:atr14")
     plt.legend(loc="upper right")
     plt.show()
+    f.close()

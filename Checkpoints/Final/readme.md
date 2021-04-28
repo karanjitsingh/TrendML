@@ -140,7 +140,7 @@ Note that the True/False ratio of `y` in the datasets are unbalanced, and the nu
 
 The surprisingly high accuracy of 80% was achievable due to the unbalanced dataset that we were using. Below is a plot showing the distribution of true labels and the label predictions from our Ridge Regresesion model on 1-day scale data. **It is notable that our model always returned `True` for the classification task, and yet its accuracy exceeded 80% thanks to fact that 80% of the dataset had the label `y = True`.**
 
- ![image](./assets/ridge_skewed_1d.png)
+ ![image](https://github.com/karanjitsingh/untitled/blob/master/Checkpoints/Midterm/assets/ridge_skewed_1d.png)
 
 In order to address the **unbalanced dataset problem**, we truncated the original dataset by randomly removing some of the data points with `y = True`. This truncating process balanced the distribution of `y` . Below are descriptions on the truncated datasets.
 

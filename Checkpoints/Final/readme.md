@@ -43,11 +43,9 @@ how we generate truth labels and features from raw price data.
 In order to evaluate the ARIMA model, we used the error function called Symmetric Mean Absolute Percentage Error (SMAPE), which is commonly used as an accuracy measure based on relative errors. We obtained a SMAPE of 56.815.
 We used p=5, d=1 and q=0 as the ARIMA parameters for our implementation
 #### Result and discussion
-![image](https://user-images.githubusercontent.com/50081744/116341906-bef86f80-a7af-11eb-9686-03e8280d28f1.png)
+![image](https://user-images.githubusercontent.com/50081744/116342229-434af280-a7b0-11eb-8e21-5e6ca34372c2.png)
 
-
-![image](https://user-images.githubusercontent.com/50081744/116341922-c3bd2380-a7af-11eb-8526-e5b3761b2103.png)
-
+![image](https://user-images.githubusercontent.com/50081744/116342245-48a83d00-a7b0-11eb-8fe7-015ce2666a1d.png)
 The result from this model offers a pretty good prediction accuracy and the training process is relatively fast.
 Note that this model only predicts prices and doesn’t predict trend. Therefore, we also tried different models that can achieve our objective of predicting trend.
 

@@ -3,11 +3,11 @@ title: Trend Analysis for Cryptocurrencies and Other Assets
 layout: template
 filename: index
 --- 
-## Project Midterm Report 
+## Project Final Report 
 
 ### Introduction/Background: 
 
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Cryptocurrency is draswing more and more attention from investors as more people are interested in decentralized finance. Predicting the trend of assets plays an important role in traders’ decision to buy or sell. There have been many studies on using machine learning techniques to predict the prices of Bitcoin. For example, Mallqui & Fernandes found the Support Vector Machines (SVM) algorithm performed best in forecasting the Bitcoin exchange rates, while the combination of Recurrent Neural Networks and a Tree classifier performed best in predicting the Bitcoin price direction (2019). Another study also found that SVM algorithm is a reliable forecasting model for cryptocurrency (Hitam& Ismail, 2018). 
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Cryptocurrency is drawing more and more attention from investors as more people are interested in decentralized finance. Predicting the trend of assets plays an important role in traders’ decision to buy or sell. There have been many studies on using machine learning techniques to predict the prices of Bitcoin. For example, Mallqui & Fernandes found the Support Vector Machines (SVM) algorithm performed best in forecasting the Bitcoin exchange rates, while the combination of Recurrent Neural Networks and a Tree classifier performed best in predicting the Bitcoin price direction (2019). Another study also found that SVM algorithm is a reliable forecasting model for cryptocurrency (Hitam& Ismail, 2018). 
 
 ### Problem definition: 
 
@@ -40,12 +40,23 @@ how we generate truth labels and features from raw price data.
   * [RSI (Relative Strength Index)](https://www.investopedia.com/terms/r/rsi.asp)
   * etc..
 
-* Follow-up Questions:
-  * Do we need to normalize the price/features before feeding it to our ML models?
+
 
 ### ARIMA & GARCH (Statistical Time Series Analysis)
-* Results & Discussion
-  * TODO
+#### Implementation 
+In order to evaluate the ARIMA model, we used the error function called Symmetric Mean Absolute Percentage Error (SMAPE), which is commonly used as an accuracy measure based on relative errors. We obtained a SMAPE of 56.815.
+
+We used p=5, d=1 and q=0 as the ARIMA parameters for our implementation
+
+#### Result and discussion
+![](./assets/arima1.png)
+
+This is the zoomed in version of the above graph.
+![](./assets/arima2.png)
+
+We could see that the result from this model offers a pretty good prediction accuracy and the training process is relatively fast.
+Note that this model only predicts prices and doesn’t predict trend. Therefore, we also tried different models that can achieve our objective of predicting trend.
+
 
 ### Decision Tree (Supervised Learning)
 * **Used** [`sklearn.tree.DecisionTreeClassifier`](https://scikit-learn.org/stable/modules/generated/sklearn.tree.DecisionTreeClassifier.html)
@@ -99,6 +110,7 @@ By changing the tree parameters and constraints such as max depth, minimum nodes
 **Indicator sets**: ['4-8-1', '4-7-5', '3-6-7', '8-7-2', '8-2-3', '7-1-8', '3-5-4', '7-4-8']   
 **Accuracy**      : [66.45,    65.80,    63.22,   71.61,  66.77,   59.35,   68.38,  70.96]  
 <br>
+By using the backtrader library in python, we were able to test the results from the above decision tree. By using the indicators and their respective conditions provided by the tree as a rule for our buy and sell signal, starting with a capital of $10000, we were able to observe if the different sets and the corresponding final values were in line with expectations. For 3 years of data starting from 2017 to 2020, the indicator set with the highest accuracy, i.e. 8-7-2 ended with a net value of $16472 (profit) whereas a different set of indicators with lower confidence ended with a net value of $9424 (loss). While the backtrader is not a comprehensive strategy and the absolute percentage of profit or loss may not be very reliable, it provides a very good estimate of how good or bad a given set of technical indicators are in determining the trend for the underlying asset. This information is often very crucial for a trader in determining their trades, direction and position size.
 
 ### Linear Models (Supervised Learning)
 Before diving into more sophisticated models, we ran initial experiments with linear models which tend to have relatively simple decision boundaries. The motivation for trying out the linear models was to see how much classification accuracy the simple linear models can achieve on our data. We chose to try ridge regression & logistic regression models for our classification task.
@@ -133,7 +145,7 @@ Note that the True/False ratio of `y` in the datasets are unbalanced, and the nu
 
 The surprisingly high accuracy of 80% was achievable due to the unbalanced dataset that we were using. Below is a plot showing the distribution of true labels and the label predictions from our Ridge Regresesion model on 1-day scale data. **It is notable that our model always returned `True` for the classification task, and yet its accuracy exceeded 80% thanks to fact that 80% of the dataset had the label `y = True`.**
 
- ![image](./assets/ridge_skewed_1d.png)
+ ![image](https://github.com/karanjitsingh/untitled/blob/master/Checkpoints/Midterm/assets/ridge_skewed_1d.png)
 
 In order to address the **unbalanced dataset problem**, we truncated the original dataset by randomly removing some of the data points with `y = True`. This truncating process balanced the distribution of `y` . Below are descriptions on the truncated datasets.
 
@@ -162,46 +174,54 @@ The linear models trained on the truncated datasets exhibit test set accuracy ar
 <br>
 
 ### Support Vector Model 
-After exploring the linear regression models, we tried another supervised machine learning model - support vector machine (SVM). We used SVM's non-linear radial kernal for classification. We used the cleaned balanced data (50/50). We checked the accuracy of the SVM model on various C Parameter. C Parameter tells the SVM optimization how much mis-classification you want to avoid on each training example. For large values of C, the optimization chooses a smaller-margin hyperplane if that hyperplane does a better job of getting all the training points classified correctly. As large values of C could lead to overfitting and small values lead to lower accuracy, We picked C =10^3 as an optimum value.
+After exploring the linear regression models, we tried another supervised machine learning model - support vector machine (SVM). We used SVM's linear and non-linear radial kernal for classification. We used the cleaned balanced data (50/50). We checked the accuracy of the SVM model on various C Parameter with gamma value set to auto. C Parameter tells the SVM optimization how much mis-classification you want to avoid on each training example. For large values of C, the optimization chooses a smaller-margin hyperplane if that hyperplane does a better job of getting all the training points classified correctly. As large values of C could lead to overfitting and small values lead to lower accuracy, We picked C =1 as an optimum value.
 
-Table 1: SVM Radial Model Trained on truncated 1hour-scale data
 
-| Model # | C Value |  Train Accuracy | Test Accuracy |
+Table 1: SVM Radial(R) and Linear(L) Model Trained on truncated 1d-scale data
+
+| Model   | C Value |  Train Accuracy | Test Accuracy |
 |---------|---------|-----------------|---------------|
-| 1       | 1e-5    | 0.5027          | 0.491         |
-| 2       | 1e-3    | 0.5014          | 0.4955        |
-| 3       | 1e2     | 0.6413          | 0.6387        |
-| 4       | 1e3     | 0.6514          | 0.6391        |
-| 5       | 1e5     | 0.6598          | 0.6317        |
+| L       | 1e-3    | 0.5143          | 0.5139        |
+| R       | 1e-3    | 0.5043          | 0.5043        |
+| L       | 1e-2    | 0.6741          | 0.6676        |
+| R       | 1e-2    | 0.5043          | 0.5043        |
+| L       | 1e-1    | 0.7006          | 0.6762        |
+| R       | 1e-1    | 0.6991          | 0.6733        |
+| L       | 1       | 0.7020          | 0.6733        |
+| R       | 1       | 0.7077          | 0.6762        |
+| L       | 1e1     | 0.7027          | 0.6733        |
+| R       | 1e1     | 0.7221          | 0.6705        |
+| L       | 1e2     | 0.7027          | 0.6733        |
+| R       | 1e2     | 0.7407          | 0.6360        |
+| L       | 1e3     | 0.7027          | 0.6733        |
+| R       | 1e3     | 0.7679          | 0.6102        |
 
-Table 2: SVM Radial Model Trained on truncated 1d-scale data
-
-| Model # | C Value |  Train Accuracy | Test Accuracy |
-|---------|---------|-----------------|---------------|
-| 1       | 1e-5    | 0.5014          | 0.4957        |
-| 2       | 1e-3    | 0.5100          | 0.4700        |
-| 3       | 1e2     | 0.5441          | 0.4700        |
-| 4       | 1e3     | 0.6475          | 0.6239        |
-| 5       | 1e5     | 0.6762          | 0.6837        |
-
-The SVM model trained on the truncated datasets provide the test set accuracy of around 63% on C=1e3 . The model results look promising and we will continue to explore more on how we can improve the accuracy. 
-
+The SVM model trained on the truncated datasets provide the best score of around 68% on test dataset with C=1 and a radial kernel. 
 <br>
 
-### Q-Learning (Reinforcement Learning)
-#### Introduction & Explanation of how Q-Learning works?
+### Principal Component Analysis
+PCA generally increases variance of the input data, which may potentially help classifiers to identify classes of data more effectively. We compared the `BUY` classification accuracy of some supervised models with/without PCA on the feature matrix as a preprocessing step. The input feature matrix is given with 6 features (technical indicators; EMA, SMA, MFI, RSI, ADX, ATR). 
+
+![image](./assets/pca_0.png)
+
+Setting `n_components = 5` for PCA resulted in a 2~4% increase in classification accuracy
+compared to models that were trained with all 6 features. Setting `n_components < 5` for PCA resulted in a lower classification accuracy compared to the models trained with all 6 features. We derived a conclusion that most of the features in the input feature matrix have some unique line of information that can contribute towards the classification task.
+
+### Reinforcement Learning
+#### Introduction
 In Reinforcement Learning, we will have an agent that will take in a state of an environment (s), then look up the policy (Pi) on what it should do and output an action (a). There will be reward (r) associated with an action that the agent decides to take. If the action changes the environment, then we will have a new state of an environment then the circle repeats again, the agent will look up the policy and output an action. The objective of the agent is to take actions that optimize the reward over time.
-In the context of trading, actions include buy, sell, and hold. Reward could be return from trade or daily return. States are factors about our assets(stocks/ cryptocurrencies) that we might observe and know about like prices.
+
+In the context of trading, actions include buy, sell, and hold. Reward could be return from trade or daily return or metrics such as Sharpe ratio based on the return. States are factors about our assets(stocks/ cryptocurrencies) that we might observe and know about like prices.
+
 This is also called Markov decision problem which include:
 *  set of states s
 *  set of actions a 
 *  transition function T[s,a,s']: a three-dimensional object that records the probability that if we are at state s and take action a we will end up at state s'
 *  reward function R[s,a] 
 We need to find $\Pi$ (s) that will maximize the reward over time.
-Most of the time, we don't know the transition or/ and the reward function, so our agent has to interact with the world and observe what happens and learn from it. We call those experience tuples. Once we have these experience tuples, we will use Q-learning, a model-free method, to develop a policy $ \Pi $ just by directly looking at our data.
 
 
-In Q-learning, we want to optimize discounted reward: 
+#### In Q-learning, we want to optimize discounted reward: 
 
 ![formula](https://render.githubusercontent.com/render/math?math=%5Csum_%7Bi%3D0%7D%5E%7B%5Cinfty%7D%20%5Cgamma%5E%7Bi-1%7Dr_i%5Chspace%7B30pt%7Ds.t.%5Chspace%7B5pt%7D0%20%5Cleq%20%5Cgamma%5Cleq1)
 
@@ -242,35 +262,29 @@ Here:
 -	argmaxa'(Q[s', a']) is the action that maximizes the Q-value among all possible actions a' from s', and,
 -	α ∈ [0, 1] (alpha) is the learning rate used to vary the weight given to new experiences compared with past Q-values.
 
-Recap:
+In the final version of the implementation, we tried the two following approaches:
 
-Building a model:
-* Define states, actions, rewards
-* Choose in-sample training period
-* Iterate: Q-table update
-* Backtest
+**Q-learning**: We implemented an LSTM neural network that optimizes on the maximization of the Q-values. This approach however did not yield good results, the following chart represents how the agent trading given the price action, the agent does not learn to trade and makes almost random actions on the price
 
+![](./assets/dqntrade.png)
 
-Testing a model:
-* Backtest on later data
+**Proximal Policy Optimization**: We hence try another algorithm called PPO, as compared to Q-learning where the network learns to predict the Q function and tries to maximize the discounted reward, in PPO the network directly learns the policy where given a state it tries to predict the action.
 
+[](./assets/ppoplots.png)
 
-Advantages: Q-learning can easily be applied to domains where all states and/or transitions are not fully defined
+With the above mean rewards plot and networth plot for the evaluation of the trained model, we note that this model even though ends up in a loss performs much better than the DQN model. The agent learns to trade on one particular trend, but once the trend changes, it's not able to take the right actions and hence we see the drop in networth and also the reward in the plots after a certain peak.
 
+Both the models were trained with the close price as input with differential log to remove autocorrelation in the time series data, along with two famous indicators RSI and MACD. The agents were trained on several episodes of the same asset price action.
 
-Challenges: reward (e.g. for buying a stock) often comes in the future - representing that properly requires look-ahead and careful weighting, taking random actions (such as trades) just to learn a good strategy is not really feasible because it will cost us lots of money (Reference: Udacity).
-
-
-#### Results & Discussion
-  * TODO
+Unlike regular models, reinforcement models generalize different as compared to other supervized and unsupervized machine learning models, are not prone to overfit. Hence the best validation strategy is the training accuracy or the mean rewards for the network itself. 
 ______
 
-#### Contributors
-* Himanshu Gupta
-* Karan Singh
-* Tien Le
-* Vikas Rao
-* Youngsuk Kim
+#### Contributions
+* Himanshu Gupta : 
+* Karan Singh : 
+* Tien Le : 
+* Vikas Rao : 
+* Youngsuk Kim : 
 
 #### References 
 
@@ -283,3 +297,5 @@ ______
 [Mallqui, D. C., & Fernandes, R. A. (2019). Predicting the DIRECTION, maximum, minimum and closing prices of daily Bitcoin exchange rate using machine learning techniques. Applied Soft Computing, 75, 596-606. doi:10.1016/j.asoc.2018.11.038](https://www.sciencedirect.com/science/article/pii/S1568494618306707)
 
 [Liew, J., Li, R., Budavári, T., & Sharma, A. (2019). Cryptocurrency investing examined. The Journal of the British Blockchain Association, 2(2), 1-12. doi:10.31585/jbba-2-2-(2)2019](https://www.researchgate.net/publication/337011389_Cryptocurrency_Investing_Examined)
+
+[John Schulman, Filip Wolski, Prafulla Dhariwal, Alec Radford, Oleg Klimov. (2017). Proximal Policy Optimization Algorithms](https://arxiv.org/abs/1707.06347)

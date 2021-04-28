@@ -35,12 +35,23 @@ how we generate truth labels and features from raw price data.
   * [RSI (Relative Strength Index)](https://www.investopedia.com/terms/r/rsi.asp)
   * etc..
 
-* Follow-up Questions:
-  * Do we need to normalize the price/features before feeding it to our ML models?
+
 
 ### ARIMA & GARCH (Statistical Time Series Analysis)
-* Results & Discussion
-  * TODO
+#### Implementation 
+In order to evaluate the ARIMA model, we used the error function called Symmetric Mean Absolute Percentage Error (SMAPE), which is commonly used as an accuracy measure based on relative errors. We obtained a SMAPE of 56.815.
+
+We used p=5, d=1 and q=0 as the ARIMA parameters for our implementation
+
+#### Result and discussion
+![](https://github.com/karanjitsingh/untitled/blob/master/Checkpoints/Final/arima1.png)
+
+This is the zoomed in version of the above graph.
+![](https://github.com/karanjitsingh/untitled/blob/master/Checkpoints/Final/arima2.png)
+
+We could see that the result from this model offers a pretty good prediction accuracy and the training process is relatively fast.
+Note that this model only predicts prices and doesn’t predict trend. Therefore, we also tried different models that can achieve our objective of predicting trend.
+
 
 ### Decision Tree (Supervised Learning)
 * **Used** [`sklearn.tree.DecisionTreeClassifier`](https://scikit-learn.org/stable/modules/generated/sklearn.tree.DecisionTreeClassifier.html)

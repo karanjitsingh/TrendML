@@ -11,7 +11,7 @@ filename: index
     height: 0;
     padding-bottom: 56.4%;
 ">
-<iframe autoplay="" controls="0" width="560" height="315" src="https://www.youtube.com/watch?v=n0Sg8rNsivI&ab_channel=TienLe" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen="" style="
+<iframe autoplay="" controls="0" width="560" height="315" src="https://www.youtube.com/embed/n0Sg8rNsivI/?controls=0&amp;rel=0&amp;showinfo=0" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen="" style="
     position: absolute;
     width: 100%;
     height: 100%;

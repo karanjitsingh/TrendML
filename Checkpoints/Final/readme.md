@@ -280,7 +280,7 @@ In the final version of the implementation, we tried the two following approache
 
 **Proximal Policy Optimization**: We hence try another algorithm called PPO, as compared to Q-learning where the network learns to predict the Q function and tries to maximize the discounted reward, in PPO the network directly learns the policy where given a state it tries to predict the action.
 
-[](./assets/ppoplots.png)
+![](./assets/ppoplots.png)
 
 With the above mean rewards plot and networth plot for the evaluation of the trained model, we note that this model even though ends up in a loss performs much better than the DQN model. The agent learns to trade on one particular trend, but once the trend changes, it's not able to take the right actions and hence we see the drop in networth and also the reward in the plots after a certain peak.
 

@@ -63,12 +63,10 @@ Note that this model only predicts prices and doesn’t predict trend. Therefore
 * **Results and Discussion**    
    The graph below plots the selected indicator sets on the x axis with the obtained accuracy in the y axis. We can observe that the combination 8-7-2 or (ATR, ADX and SMA50)       provides the best estimate of the trend among the selected indicators as it has the highest accuracy.
   
-  ![image](https://user-images.githubusercontent.com/48078197/113922177-f7aab780-97b4-11eb-87ac-7a8839c21f92.png)
-  
+![image](https://user-images.githubusercontent.com/50081744/116342109-10086380-a7b0-11eb-8a8f-02d862dc1cd4.png)  
   The below image shows the branch traversal of the decision tree to reach the classification or the leaf nodes. It is important to note that the max depth of the tree has been   selected as 3 to limit overfitting as technical indicators are very prone to overfit the data in stock trend and price prediction. To give us a better evidence and further       control overfitting, another constraint has been placed where each leaf is considered valid only if there are atleast 25 samples in it.
   
-  ![image](https://user-images.githubusercontent.com/48078197/113923315-6b00f900-97b6-11eb-84e1-636756fec762.png)
-  
+![image](https://user-images.githubusercontent.com/50081744/116342120-14cd1780-a7b0-11eb-93d4-be45cb9424f5.png)  
   The gini index is a metric used to measure the purity of the node. It is similar to entropy in use and can be used to observe the quality of the split.  
   GiniIndex = 1&nbsp; –&nbsp; $\sum_{i=1}^n$ $p^2_i$ 
   

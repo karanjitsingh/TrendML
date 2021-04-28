@@ -194,6 +194,14 @@ Table 1: SVM Radial(R) and Linear(L) Model Trained on truncated 1d-scale data
 The SVM model trained on the truncated datasets provide the best score of around 68% on test dataset with C=1 and a radial kernel. 
 <br>
 
+### Principal Component Analysis
+PCA generally increases variance of the input data, which may potentially help classifiers to identify classes of data more effectively. We compared the `BUY` classification accuracy of some supervised models with/without PCA on the feature matrix as a preprocessing step. The input feature matrix is given with 6 features (technical indicators; EMA, SMA, MFI, RSI, ADX, ATR). 
+
+![image](./assets/pca_0.png)
+
+Setting `n_components = 5` for PCA resulted in a 2~4% increase in classification accuracy
+compared to models that were trained with all 6 features. Setting `n_components < 5` for PCA resulted in a lower classification accuracy compared to the models trained with all 6 features. We derived a conclusion that most of the features in the input feature matrix have some unique line of information that can contribute towards the classification task.
+
 ### Q-Learning (Reinforcement Learning)
 #### Introduction & Explanation of how Q-Learning works?
 In Reinforcement Learning, we will have an agent that will take in a state of an environment (s), then look up the policy (Pi) on what it should do and output an action (a). There will be reward (r) associated with an action that the agent decides to take. If the action changes the environment, then we will have a new state of an environment then the circle repeats again, the agent will look up the policy and output an action. The objective of the agent is to take actions that optimize the reward over time.

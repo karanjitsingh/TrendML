@@ -1,5 +1,5 @@
-# untitled
-A nameless asset price trend prediction project. This project explores various machine learning techniques that could potentially be used for algorithmic trading and price trend prediction. We explore techniques such as Decision Trees, SVM, Reinforcement Learning to predict price trends of an asset.
+# TrendML
+This project explores various machine learning techniques that could potentially be used for algorithmic trading and price trend prediction. We explore techniques such as Decision Trees, SVM, Reinforcement Learning to predict price trends of an asset.
 
 ## Proposal
 

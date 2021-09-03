@@ -1,7 +1,7 @@
 # TrendML
-Exploring various machine learning techniques that could potentially be used for algorithmic trading and price trend prediction. We explore techniques such as Decision Trees, SVM, Reinforcement Learning to predict price trends of an asset.
+Exploring various machine learning techniques that could potentially be used for algorithmic trading and analysis tools for price trend prediction that can provide essential market signals to traders. The project explores techniques such as Decision Trees, SVM, Reinforcement Learning to predict price trends of an asset.
 
-## Proposal
+-----------------------------
 
 ### Introduction/Background: 
 
@@ -9,13 +9,13 @@ Cryptocurrency is drawing more and more attention from investors as more people 
 
 ### Problem definition: 
 
-We found several limitations in current literature. Firstly, most of them only predict price of assets, without any indication for traders whether to buy, sell or hold their investments. Also, cryptocurrency short-term predictability is difficult, thus day trading cryptocurrencies might be challenging (Liew, Li, Budavári, & Sharma, 2019). We believe that predicting trend is a better measure than predicting price.  
+There are several limitations in current literature. Firstly, most of them only predict price of assets, without any indication for traders whether to buy, sell or hold their investments. Also, cryptocurrency short-term predictability is difficult, thus day trading cryptocurrencies might be challenging (Liew, Li, Budavári, & Sharma, 2019). Hence, it can be argues that predicting trend is a better measure than predicting price.  
 
-Secondly, no studies have employed technical indicators commonly used by stock traders in their cryptocurrency price prediction model. As Mallqui & Fernades (2019) pointed out, the technical indicators such as Relative Strength Index (RSI), Moving Average Convergence/Divergence (MACD), etc. could be used in addition to economic indicators to better predict Bitcoin price direction. Therefore, we would like to propose a model that incorporates the indicators and predicts trend to help traders decide when to sell, hold, or buy cryptocurrencies at a given moment. 
+Secondly, no studies have employed technical indicators commonly used by stock traders in their cryptocurrency price prediction model. As Mallqui & Fernades (2019) pointed out, the technical indicators such as Relative Strength Index (RSI), Moving Average Convergence/Divergence (MACD), etc. could be used in addition to economic indicators to better predict Bitcoin price direction. Therefore, there is a potential for a model that incorporates the indicators and predicts trend to help traders decide when to sell, hold, or buy cryptocurrencies at a given moment. 
 
 ### Methods: 
 
-Our data will be obtained from Binance using its API. We are planning to work on 5 most popular coins and our data dates to 2018.  
+Our data will is obtained from Binance using its API.   
 
 Relevant methods include: 
 
@@ -25,15 +25,11 @@ Relevant methods include:
 
 - Supervised: A study found that SVM performed best and gave consistent results in terms 	of predictive accuracy compared to the logistic regression, artificial neural networks and 	random forest classification algorithms (Akyildirim, Goncu & Sensoy, 2020) 
 
-### Potential results: 
-
-We hope to see that our model can effectively signal whether traders should buy, sell, or hold their cryptocurrencies at a given moment and result in more profits compared to profits obtained from standard traditional baseline models such as ARIMA and GARCH. 
-
 ### Discussion: 
 
-We believe that our model would be practical and useful for traders, especially amateur traders to easily decide whether to buy, hold or sell their cryptocurrencies.  
+Such models could potentially be practical and useful for traders, especially amateur traders to easily decide whether to buy, hold or sell their cryptocurrencies.
 
-Based on previous studies, we are planning to use dimensionality reduction technique (unsupervised), Q-learning and decision tree (reinforcement learning), and SVM algorithm (supervised) for our model. We also plan to apply LSTMs in conjunction with reinforcement learning which have been proven to be useful in long-term prediction. 
+Based on previous studies, This project explores dimensionality reduction technique, Q-learning and decision tree (reinforcement learning), and SVM algorithms for modeling. LSTMs in conjunction with reinforcement learning have also been proven to be useful in long-term prediction. 
 
 ______
 
